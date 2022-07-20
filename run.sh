@@ -14,6 +14,7 @@ npm install @nestjs/common
 npm install @nestjs/core
 npm install source-map-support
 npm install reflect-metadata
+npm install rxjs
 
 cd rest-api/
 npm run start:dev
