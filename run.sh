@@ -8,8 +8,8 @@ node -v
 npm -v
 
 sudo npm i -g @nestjs/cli
-sudo npm i -g @nestjs/common
-sudo npm i -g @nestjs/core
+npm install @nestjs/common
+npm install @nestjs/core
 
 cd rest-api/
 npm run start:dev
