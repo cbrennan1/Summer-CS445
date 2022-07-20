@@ -10,12 +10,13 @@ node -v
 npm -v
 npm install -g npm
 
-sudo npm i -g @nestjs/cli
-sudo npm install @nestjs/common
-sudo npm install @nestjs/core
 sudo npm install source-map-support
 sudo npm install reflect-metadata
 sudo npm install rxjs
+sudo npm i -g @nestjs/cli
+sudo npm install @nestjs/common
+sudo npm install @nestjs/core
+sudo npm install @nestjs/platform-express
 
 
 cd rest-api/
