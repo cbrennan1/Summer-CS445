@@ -11,8 +11,9 @@ npm -v
 npm install -g npm
 
 sudo npm i -g @nestjs/cli
-npm install @nestjs/common
-npm install @nestjs/core
+sudo npm install @nestjs/common
+sudo npm install @nestjs/core
+sudo npm install source-map-support
 
 
 cd rest-api/
