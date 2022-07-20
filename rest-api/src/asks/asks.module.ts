@@ -3,7 +3,8 @@ import { AsksService } from './asks.service';
 import { AsksController } from './asks.controller';
 
 @Module({
-  providers: [AsksService],
-  controllers: [AsksController]
+  providers: [AsksController],
+  controllers: [AsksService],
+  exports: [AsksService]
 })
 export class AsksModule {}

@@ -1,4 +1,4 @@
-export interface Asks {
+export interface AsksModel {
     uid: number;
     aid: number;
     type: string;
