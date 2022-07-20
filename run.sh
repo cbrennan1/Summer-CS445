@@ -10,6 +10,7 @@ npm -v
 sudo npm i -g @nestjs/cli
 npm install @nestjs/common
 npm install @nestjs/core
+npm install source-map-support
 
 cd rest-api/
 npm run start:dev
