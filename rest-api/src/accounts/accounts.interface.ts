@@ -1,11 +1,11 @@
 export interface AccountModel {
-    uid: number;
-    name: string;
-    address: JSON;
-    phone: string;
-    picture: string;
-    is_active: Boolean;
-    date_created: Date;
+  uid: number;
+  name: string;
+  address: { street : string, zip : string };
+  phone: string;
+  picture: string;
+  is_active: boolean;
+  date_created: string;
   }
 
 /*
