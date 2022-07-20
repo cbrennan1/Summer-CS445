@@ -9,4 +9,5 @@ npm -v
 
 sudo npm i -g @nestjs/cli
 
+cd rest-api/
 npm start
