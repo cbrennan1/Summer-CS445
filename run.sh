@@ -14,6 +14,7 @@ sudo npm i -g @nestjs/cli
 sudo npm install @nestjs/common
 sudo npm install @nestjs/core
 sudo npm install source-map-support
+sudo npm install reflect-metadata
 
 
 cd rest-api/
