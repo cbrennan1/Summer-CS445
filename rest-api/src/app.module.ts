@@ -4,11 +4,12 @@ import { AsksModule } from './asks/asks.module';
 import { GivesModule } from './gives/gives.module';
 import { NotesModule } from './notes/notes.module';
 import { ReportsModule } from './reports/reports.module';
+import { ThanksModule } from './thanks/thanks.module';
 
 
 
 @Module({
-  imports: [AccountsModule, AsksModule, GivesModule, NotesModule, ReportsModule],
+  imports: [AccountsModule, AsksModule, GivesModule, NotesModule, ReportsModule, ThanksModule],
   controllers: [],
   providers: [],
 })
