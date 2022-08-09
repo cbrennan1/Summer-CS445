@@ -1,4 +1,4 @@
-export class ThanksCreateDto {
+export class CreateThankDto {
     uid: number;
     tid: number;
     thank_to: number;

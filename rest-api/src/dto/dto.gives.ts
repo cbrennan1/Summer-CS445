@@ -1,4 +1,4 @@
-export class GivesCreationDto {
+export class CreateGiveDto {
     uid: number;
     gid: number;
     type: string;

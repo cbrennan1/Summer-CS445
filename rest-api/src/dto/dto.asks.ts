@@ -1,4 +1,4 @@
-export class AsksCreationDto{
+export class CreateAskDto{
     uid: number;
     aid: number;
     type: string;
