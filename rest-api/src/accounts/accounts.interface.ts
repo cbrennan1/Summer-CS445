@@ -6,7 +6,7 @@ export interface AccountModel {
   picture: string;
   is_active: boolean;
   date_created: string;
-  }
+}
 
 /*
 let now = new Date();
