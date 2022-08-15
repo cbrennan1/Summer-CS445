@@ -45,7 +45,7 @@ export class AccountsService {
 	};
     private readonly accounts: AccountModel[] = [this.account1, this.account2, this.account3];
 
-    @HttpCode(HttpStatus.TEMPORARY_REDIRECT)
+    
     create(createAccountDto: CreateAccountDto): AccountModel {
         // find the next id for a new account
         let uid = this.counter;
