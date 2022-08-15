@@ -51,7 +51,7 @@ export class AccountsService {
         let uid = this.counter;
         const newAccount: AccountModel = {
             ...createAccountDto,
-            uid
+        uid
         };
         this.accounts.push(newAccount);
         this.counter ++;

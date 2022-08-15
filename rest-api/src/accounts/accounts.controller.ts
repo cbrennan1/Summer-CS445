@@ -19,7 +19,7 @@ export class AccountsController {
     //End Points Regarding Accounts
     @Header('Location', 'New Account')
     @Post()
-    create(@Body() createAccountDto: CreateAccountDto) {
+    createAccount(@Body() createAccountDto: CreateAccountDto) {
         return this.accountsService.create(createAccountDto);
     }
     @Get(':uid/activate')
@@ -28,11 +28,11 @@ export class AccountsController {
     }
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put(':uid')
-    update(@Param('uid', ParseIntPipe) uid: number, @Body() account: AccountModel): AccountModel {
+    updateAccount(@Param('uid', ParseIntPipe) uid: number, @Body() account: AccountModel): AccountModel {
         return this.accountsService.update(uid, account);
     }
     @Delete(':uid')
-    delete(@Param('uid', ParseIntPipe) uid: number): void {
+    deleteAccount(@Param('uid', ParseIntPipe) uid: number): void {
         this.accountsService.delete(uid);
     }
     @Get()
