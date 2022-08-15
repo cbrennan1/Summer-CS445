@@ -1,14 +1,14 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException, Param, ParseIntPipe } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException, Param, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
 import { CreateAccountDto } from '../dto/dto.accounts';
 import { AccountModel } from './accounts.interface';
 
 @Injectable()
 export class AccountsService {
-    private readonly accounts: AccountModel[] = [];
-    private counter = 0;
+    //private readonly accounts: AccountModel[] = [];
+    private counter = 3;
 
     public account1 = {
-		"uid": "",
+		"uid": 0,
 		"name": "Virgil Bistriceanu",
 		"address": {
 			"street": "10 West 31st ST",
@@ -20,7 +20,7 @@ export class AccountsService {
 		"date_created": ""
 	};
     public account2 = {
-		"uid": "",
+		"uid": 1,
 		"name": "Jane Smith",
 		"address": {
 			"street": "123 2nd ST",
@@ -32,7 +32,7 @@ export class AccountsService {
 		"date_created": ""
 	};
     public account3 = {
-		"uid": "",
+		"uid": 2,
 		"name": "CSR #1",
 		"address": {
 			"street": "101 W Main St.",
@@ -43,7 +43,9 @@ export class AccountsService {
 		"is_active": true,
 		"date_created": ""
 	};
-    
+    private readonly accounts: AccountModel[] = [this.account1, this.account2, this.account3];
+
+    @HttpCode(HttpStatus.TEMPORARY_REDIRECT)
     create(createAccountDto: CreateAccountDto): AccountModel {
         // find the next id for a new account
         let uid = this.counter;
