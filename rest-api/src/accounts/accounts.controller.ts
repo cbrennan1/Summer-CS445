@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { AsksService } from '../asks/asks.service'
 import { GivesService } from '../gives/gives.service';
@@ -17,6 +17,7 @@ export class AccountsController {
     constructor(private accountsService: AccountsService, private asksService: AsksService, private givesService: GivesService, private thanksService: ThanksService, private notesService: NotesService, private reportsService: ReportsService){}
 
     //End Points Regarding Accounts
+    @Header('Location', 'New Account')
     @Post()
     create(@Body() createAccountDto: CreateAccountDto) {
         return this.accountsService.create(createAccountDto);
@@ -25,6 +26,7 @@ export class AccountsController {
     activateAccount(@Param('uid', ParseIntPipe) uid: number): AccountModel {
         return this.accountsService.activate(uid);
     }
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Put(':uid')
     update(@Param('uid', ParseIntPipe) uid: number, @Body() account: AccountModel): AccountModel {
         return this.accountsService.update(uid, account);
