@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode } from '@nestjs/common';
+//Imports
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode, HttpException } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { AsksService } from '../asks/asks.service'
 import { GivesService } from '../gives/gives.service';
@@ -11,129 +12,154 @@ import { CreateAskDto } from '../dto/dto.asks';
 import { CreateGiveDto } from '../dto/dto.gives';
 import { CreateThankDto } from '../dto/dto.thanks';
 import { NotesModel } from '../notes/notes.interface';
+import { AccountsModule } from './accounts.module';
 
 @Controller('accounts')
 export class AccountsController {
     constructor(private accountsService: AccountsService, private asksService: AsksService, private givesService: GivesService, private thanksService: ThanksService, private notesService: NotesService, private reportsService: ReportsService){}
-
+    
     //End Points Regarding Accounts
-    @Header('Location', 'New Account')
+    //Post Create Account
+    @Header('Location', '/accounts/')
     @Post()
     createAccount(@Body() createAccountDto: CreateAccountDto) {
         return this.accountsService.create(createAccountDto);
     }
+    //Get Activate Account
     @Get(':uid/activate')
-    activateAccount(@Param('uid', ParseIntPipe) uid: number): AccountModel {
-        return this.accountsService.activate(uid);
+    activateAccount(@Param('uid')uid: string): AccountModel {
+        return this.accountsService.activate(parseInt(uid));
     }
+    //Put Update Account
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put(':uid')
-    updateAccount(@Param('uid', ParseIntPipe) uid: number, @Body() account: AccountModel): AccountModel {
-        return this.accountsService.update(uid, account);
+     updateAccount(@Param('uid') uid: string, @Body() account: AccountModel): void {
+        this.accountsService.update(parseInt(uid), account);
+        /*throw new HttpException({
+            status: HttpStatus.BAD_REQUEST,
+            type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+            detail: 'You may not use PUT to activate an account, use GET /accounts/3/activate instead',
+            instance: '/accounts/3',
+            error: 'Custom Bad Request Error Message',
+          }, HttpStatus.BAD_REQUEST);*/    
     }
+    //Delete Delete Account
     @Delete(':uid')
     deleteAccount(@Param('uid', ParseIntPipe) uid: number): void {
         this.accountsService.delete(uid);
     }
+    //Get Find Accounts
     @Get()
     findAccounts(@Query() query?: { key?: string, start_date?: Date, end_date?: Date}): AccountModel[] {
-        console.log(query);
+        //console.log(query);
         return this.accountsService.findAll(query.key, query.start_date, query.end_date);
     }
+    //Get Find Account by UID
     @Get(':uid')
-    findOneAccount(@Param('uid', ParseIntPipe) uid: number): AccountModel {
-        return this.accountsService.findOne(uid);
+    findOneAccount(@Param('uid') uid: string): AccountModel {
+        return this.accountsService.findOne(parseInt(uid));
     }
 
-     //End Points Regarding Asks
+    //End Points Regarding Asks
+    //Post Create Asks
     @Post(':uid/asks')
     createAsk(@Body() createAskDto: CreateAskDto) {
         return this.asksService.create(createAskDto);
     }
+    //Get Deactivate Asks
     @Get(':uid/asks/:aid/deactivate')
     deactivateAsk(@Param('uid', ParseIntPipe) uid: number, @Param('aid', ParseIntPipe) aid: number) {
         return this.asksService.deactivate(uid, aid);
     }
+    //Put Update Asks
     @Put(':uid/asks/:aid')
     updateAsk() {
         return this.asksService.update();
     }
+    //Delete Delete Asks
     @Delete(':uid/asks/:aid')
     deleteAsk() {
         return this.asksService.delete();
     }
+    //Get Get Users Asks
     @Get(':uid/asks')
     getMyAsks(@Query() query?: {is_active?: boolean}) {
         return this.asksService.getMyAsks();
     }
 
     //End Points Regarding Gives
+    //Post Creating Gives
     @Post(':uid/gives')
     createGive(@Body() createGiveDto: CreateGiveDto) {
         return this.givesService.create(createGiveDto);
     }
+    //Get Deactivate Gives
     @Get(':uid/gives/:gid/deactivate')
     deactivateGive() { 
         return this.givesService.deactivate();
     }
+    //Put Update Gives
     @Put(':uid/gives/:gid')
     updateGive() {
         return this.givesService.update();
     }
+    //Delete Delete Gives
     @Delete(':uid/gives/:gid')
     deleteGive() {
         return this.givesService.delete();
     }
+    //Get Get Users Gives
     @Get(':uid/gives')
     getMyGives() {
         return this.givesService.viewMyGives();
     }
 
     //End Points Regarding Thanks
+    //Post Create Thanks
     @Post(':uid/thanks')
-    createThank(@Body() createThankDto: CreateThankDto) {
+    createThanks(@Body() createThankDto: CreateThankDto) {
         return this.thanksService.createThank(createThankDto);
     }
+    //Put Update Thanks
     @Put(':uid/thanks/:tid')
-    updateThank() {
+    updateThanks() {
         return this.thanksService.update();
     }
+    //Get Get Users Thanks
     @Get(':uid/thanks')
     getAccountThanks() {
         return this.thanksService.getMyThanks();
     }
 
-
-    //End Points Regarding NOtes
-
-    // Update Ask
+    //End Points Regarding Notes
+    //Put Update Asks Notes
     @Put(':uid/asks/:aid/notes/:nid')
     updateAskNote() {
         return this.notesService.updateAskNote();
     }
-    // Update Give
+    //Put Update Gives Notes
     @Put(':uid/gives/:gid/notes/:nid')
     updateGiveNote() {
         return this.notesService.updateGiveNote();
     }
 
-    // Delete Ask
+    //Delete Delete Asks Notes
     @Delete(':uid/asks/:aid/notes/:nid')
     deleteAskNote() {
         return this.notesService.deleteAskNote();
     }
-    // Delete Give
+    //Delete Delete Gives Notes
     @Delete(':uid/gives/:gid/notes/:nid')
     deleteGiveNote() {
         return this.notesService.deleteGiveNote();
     }
 
-    // View ask notes
+    //Get View Asks Notes
     @Get(':uid/asks/:aid/notes/:nid')
     getAskNotes() {
         return this.notesService.viewNotes();
     }
-    // View give notes
+    //Get View Gives Notes
     @Get(':uid/gives/:gid/notes/:nid')
     getGiveNotes() {
         return this.notesService.viewNotes();
