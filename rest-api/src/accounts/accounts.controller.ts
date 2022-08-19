@@ -1,5 +1,5 @@
 //Imports
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode, HttpException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode, HttpException, BadRequestException, Res } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { AsksService } from '../asks/asks.service'
 import { GivesService } from '../gives/gives.service';
@@ -13,6 +13,7 @@ import { CreateGiveDto } from '../dto/dto.gives';
 import { CreateThankDto } from '../dto/dto.thanks';
 import { NotesModel } from '../notes/notes.interface';
 import { AccountsModule } from './accounts.module';
+import { AsksModel } from '../asks/asks.interface';
 
 @Controller('accounts')
 export class AccountsController {
@@ -20,9 +21,10 @@ export class AccountsController {
     
     //End Points Regarding Accounts
     //Post Create Account
-    @Header('Location', '/accounts/')
     @Post()
-    createAccount(@Body() createAccountDto: CreateAccountDto) {
+    create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res) {
+        let locationHeader = '/accounts/' + this.accountsService.counter;
+        res.header('Location', locationHeader);
         return this.accountsService.create(createAccountDto);
     }
     //Get Activate Account
@@ -45,8 +47,8 @@ export class AccountsController {
     }
     //Delete Delete Account
     @Delete(':uid')
-    deleteAccount(@Param('uid', ParseIntPipe) uid: number): void {
-        this.accountsService.delete(uid);
+    deleteAccount(@Param('uid') uid: string): void {
+        this.accountsService.delete(parseInt(uid));
     }
     //Get Find Accounts
     @Get()
@@ -63,28 +65,40 @@ export class AccountsController {
     //End Points Regarding Asks
     //Post Create Asks
     @Post(':uid/asks')
-    createAsk(@Body() createAskDto: CreateAskDto) {
+    createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res) {
+        if (!this.accountsService.accounts[parseInt(uid)].is_active) {
+            throw new BadRequestException('Account is not active, unable to create an Ask');
+        }
+        let locationHeader = '/accounts/' + createAskDto.uid + '/asks/' + this.asksService.counter;
+        res.header('Location', locationHeader);
         return this.asksService.create(createAskDto);
     }
     //Get Deactivate Asks
     @Get(':uid/asks/:aid/deactivate')
-    deactivateAsk(@Param('uid', ParseIntPipe) uid: number, @Param('aid', ParseIntPipe) aid: number) {
-        return this.asksService.deactivate(uid, aid);
+    deactivateAsk(@Param('uid') uid: string, @Param('aid') aid: string): AsksModel {
+        return this.asksService.deactivate(parseInt(uid), parseInt(aid));
     }
     //Put Update Asks
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Put(':uid/asks/:aid')
-    updateAsk() {
-        return this.asksService.update();
+    updateAsk(@Param('uid') uid: string, @Param('aid') aid: string, @Body() ask: AsksModel): void {
+        return this.asksService.update(parseInt(uid), parseInt(aid), ask);
     }
-    //Delete Delete Asks
+    //Delete Delete 
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':uid/asks/:aid')
-    deleteAsk() {
-        return this.asksService.delete();
+    deleteAsk(@Param('uid') uid: string, @Param('aid') aid: string): void {
+        return this.asksService.delete(parseInt(uid), parseInt(aid));
     }
     //Get Get Users Asks
     @Get(':uid/asks')
-    getMyAsks(@Query() query?: {is_active?: boolean}) {
-        return this.asksService.getMyAsks();
+    getMyAsks(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: string}) {
+        return this.asksService.getMyAsks(uid, query.is_active);
+    }
+    //Testing
+    @Get(':uid/asks/:aid')
+    getUsersAsk(@Param('uid') uid: string, @Param('aid') aid: string,){
+        return this.asksService.getMyAsks(parseInt(uid), aid);
     }
 
     //End Points Regarding Gives

@@ -6,7 +6,7 @@ import { AccountModel } from './accounts.interface';
 @Injectable()
 export class AccountsService {
     //Counter and Actor Declerations
-    private counter = 0;
+    public counter = 0;
     static Actors = {
         0: "RU",
         1: "CSR"
@@ -51,7 +51,7 @@ export class AccountsService {
 	};
 
     //Construction of Three Initial Accounts
-    private readonly accounts: AccountModel[] = [];
+    public readonly accounts: AccountModel[] = [];
     constructor () {
         this.create(this.account1);
         this.create(this.account2);
@@ -112,10 +112,11 @@ export class AccountsService {
         if (key) {
             return this.accounts.filter(account => { 
                 // Start Date End Date are WIP
-                let accountS_Date = account.date_created.toLowerCase();
+                let accountE_Date = end_date;
+                let accountS_Date = start_date;
                 let accountName = account.name.toLowerCase();
                 let accountAddressStreet = account.address.street.toLowerCase();
-                return accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase()) || accountS_Date.includes(key.toLowerCase()) || account.address.zip.includes(key) || account.phone.includes(key) || account.date_created.includes(key)});
+                return accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase())  || account.address.zip.includes(key) || account.phone.includes(key)});
         }
         return this.accounts;
     }
