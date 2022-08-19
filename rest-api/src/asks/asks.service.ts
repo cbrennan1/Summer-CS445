@@ -1,14 +1,17 @@
 //Imports
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, HttpServer } from '@nestjs/common';
 import { AsksModel } from './asks.interface';
 import { CreateAskDto } from '../dto/dto.asks';
 import { AccountsService } from '../accounts/accounts.service';
+import { HttpService } from '@nestjs/axios';
+
 
 @Injectable()
 export class AsksService {
     //Counter and Asks Decleration
     public readonly asks: AsksModel[] = [];
     public counter = 0;
+    constructor(private http: HttpService){}
 
     //Create Asks Service
     create(createAskDto: CreateAskDto): AsksModel {
@@ -21,6 +24,9 @@ export class AsksService {
         newAsk.aid = +newAsk.aid;
         this.asks.push(newAsk);
         this.counter ++;
+        //this.http.post('http://localhost:8080/bn/api/asks', newAsk)
+        console.log(newAsk)
+        console.log('New Ask From AsksServices')
         return newAsk;
     }
 
@@ -103,13 +109,14 @@ export class AsksService {
     }
     //Find Ask by AID
     findOne(aid: number): AsksModel {
-        const ask: AsksModel = this.asks.find(ask => ask.aid === aid);
+        const ask: AsksModel = this.asks.find(ask => ask.aid == aid);
 
         if (!ask) {
             throw new NotFoundException('Ask ' +aid+ ' was not found.');
         }
         return ask;
     }
+
     //Search Asks
     searchAsks(key?: string, start_date?: Date, end_date?: Date): AsksModel[] {
         if (!key || key === null) {
