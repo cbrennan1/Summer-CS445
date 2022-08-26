@@ -7,5 +7,4 @@ export class CreateGiveDto {
     end_date: string;
     extra_zip: [number, number];
     is_active: boolean;
-    date_created: string;
-}
+    date_created: string|Date|null;}

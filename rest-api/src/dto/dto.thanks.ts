@@ -3,5 +3,4 @@ export class CreateThankDto {
     tid: number;
     thank_to: number;
     description: string;
-    date_created: string;
-}
+    date_created: string|Date|null;}

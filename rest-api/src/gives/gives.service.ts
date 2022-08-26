@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { AccountsService } from '../accounts/accounts.service';
 import { CreateGiveDto } from '../dto/dto.gives';
 import { GivesModel } from './gives.interface';
 
@@ -74,7 +75,7 @@ export class GivesService {
             throw new NotFoundException('Valid UID is required to find specified account Gives.');
         }
     }
-    findAll(v_by: number, is_active?): GivesModel[] {
+    findAll(v_by: number, is_active?: string): GivesModel[] {
         // TO-DO: Process is_active
         if (v_by) {
             return this.gives.filter(give => { 
