@@ -1,6 +1,7 @@
 export interface ThanksModel {
     uid: number;
-    tid: number;
+    tid: number|null;
     thank_to: number;
     description: string;
-    date_created: string|Date|null;}
+    date_created: string|Date|null;
+}

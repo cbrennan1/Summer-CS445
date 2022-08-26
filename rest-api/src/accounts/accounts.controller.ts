@@ -10,18 +10,22 @@ import { AccountModel } from '../accounts/accounts.interface';
 import { CreateAccountDto } from '../dto/dto.accounts';
 import { CreateAskDto } from '../dto/dto.asks';
 import { CreateGiveDto } from '../dto/dto.gives';
-import { CreateThankDto } from '../dto/dto.thanks';
+import { CreateThanksDto } from '../dto/dto.thanks';
 import { NotesModel } from '../notes/notes.interface';
 import { AccountsModule } from './accounts.module';
 import { AsksModel } from '../asks/asks.interface';
 import { GivesModel } from '../gives/gives.interface';
 import { HttpService } from '@nestjs/axios';
+import { ThanksModel } from '../thanks/thanks.interface';
 
 @Controller('bn/api/')
 export class AccountsController {
     constructor(private accountsService: AccountsService, private asksService: AsksService, private givesService: GivesService, private thanksService: ThanksService, private notesService: NotesService, private reportsService: ReportsService, private http: HttpService){}
+
     
+//------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Accounts
+//------------------------------------------------------------------------------------------------------------------------------/
     //Post Create Account
     @Post('accounts')
     create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res) {
@@ -38,14 +42,7 @@ export class AccountsController {
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('accounts/:uid')
      updateAccount(@Param('uid') uid: string, @Body() account: AccountModel): void {
-        this.accountsService.update(parseInt(uid), account);
-        /*throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
-            detail: 'You may not use PUT to activate an account, use GET /accounts/3/activate instead',
-            instance: '/accounts/3',
-            error: 'Custom Bad Request Error Message',
-          }, HttpStatus.BAD_REQUEST);*/    
+        this.accountsService.update(parseInt(uid), account); 
     }
     //Delete Delete Account
     @Delete('accounts/:uid')
@@ -63,24 +60,26 @@ export class AccountsController {
     findOneAccount(@Param('uid') uid: string): AccountModel {
         return this.accountsService.findOne(parseInt(uid));
     }
-
+//------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Asks
+//------------------------------------------------------------------------------------------------------------------------------/
     //Post Create Asks
     @Post('accounts/:uid/asks')
     createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res) {
         if (!this.accountsService.accounts[parseInt(uid)].is_active) {
-            throw new BadRequestException('Account is not active, unable to create an Ask.');
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+                detail: 'This account ' +uid+ ' is not active an may not create an ask.',
+                instance: '/accounts/'+uid,
+                title: 'Your request data didn\'t pass validation',
+              }, HttpStatus.BAD_REQUEST);
         }
         let locationHeader = '/accounts/' + createAskDto.uid + '/asks/' + this.asksService.counter;
         res.header('Location', locationHeader);
-        console.log('PostedFromAccountController');
-        //this.http.post('http://localhost:8080/bn/api/asks', createAskDto);
-        this.postAsks;
-        return this.asksService.create(createAskDto);
-    }
-
-    postAsks(@Body() createAskDto: CreateAskDto){
-        return this.http.post('http://localhost:8080/bn/api/asks', createAskDto);
+        //this.asksService.postAsk(createAskDto);
+        console.log("Asks Service Post Ask has been called from Account Controller");
+        return this.asksService.createAsk(createAskDto);
     }
 
     //Get Deactivate Asks
@@ -106,17 +105,36 @@ export class AccountsController {
         return this.asksService.getMyAsks(uid, query.is_active);
     }
     //Testing
+/*  
     @Get('accounts/:uid/asks/:aid')
     getUsersAsk(@Param('uid') uid: string, @Param('aid') aid: string,){
+        if (!this.accountsService.accounts[uid].is_active) {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+                detail: 'This account ' +uid+ ' is not active an may not create an ask.',
+                instance: '/accounts/'+uid,
+                title: 'Your request data didn\'t pass validation',
+              }, HttpStatus.BAD_REQUEST);
+        }
         return this.asksService.getMyAsks(parseInt(uid), aid);
-    }
-
+    } 
+*/
+//------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Gives
+//------------------------------------------------------------------------------------------------------------------------------/
+
     //Post Creating Gives
     @Post('accounts/:uid/gives')
     createGive(@Param('uid') uid: string, @Body() createGiveDto: CreateGiveDto, @Res( {passthrough: true}) res) {
-        if (!this.accountsService.accounts[parseInt(uid)].is_active) {
-            throw new BadRequestException('Account is not active, unable to create a Give.');
+        if (this.accountsService.accounts[parseInt(uid)].is_active == false) {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+                detail: 'This account ' + uid + ' is not active an may not create a give.',
+                instance: '/accounts/'+uid,
+                title: 'Your request data didn\'t pass validation',
+              }, HttpStatus.BAD_REQUEST);
         }
         let locationHeader = '/accounts/' + createGiveDto.uid + '/gives/' + this.givesService.counter;
         res.header('Location', locationHeader);
@@ -142,27 +160,42 @@ export class AccountsController {
     //Get Users Gives
     @Get('accounts/:uid/gives')
     getMyGives(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: string}) {
+        if (!this.accountsService.accounts[uid].is_active) {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+                detail: 'This account ' +uid+ ' is not active an may not create an give.',
+                instance: '/accounts/'+uid,
+                title: 'Your request data didn\'t pass validation',
+              }, HttpStatus.BAD_REQUEST);
+        }
         return this.givesService.getMyGives(uid, query.is_active);
+        
     }
-
+//------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Thanks
+//------------------------------------------------------------------------------------------------------------------------------/
     //Post Create Thanks
     @Post('accounts/:uid/thanks')
-    createThanks(@Body() createThankDto: CreateThankDto) {
-        return this.thanksService.createThank(createThankDto);
+    createThank(@Param('uid') uid: string, @Body() createThankDto: CreateThanksDto, @Res( {passthrough: true}) res) {
+        let locationHeader = '/accounts/' + createThankDto.uid + '/thanks/' + this.thanksService.counter;
+        res.header('Location', locationHeader);
+        return this.thanksService.createThanks(createThankDto);
     }
     //Put Update Thanks
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Put('accounts/:uid/thanks/:tid')
-    updateThanks() {
-        return this.thanksService.update();
+    updateThank(@Param('uid', ParseIntPipe) uid: number, @Param('tid', ParseIntPipe) tid: number, @Body() thank: ThanksModel): ThanksModel {
+        return this.thanksService.update(uid, tid, thank);
     }
     //Get Get Users Thanks
     @Get('accounts/:uid/thanks')
-    getAccountThanks() {
-        return this.thanksService.getMyThanks();
+    getAccountThanks(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: boolean}) {
+        return this.thanksService.getAccountThanks(uid, query.is_active);
     }
-
+//------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Notes
+//------------------------------------------------------------------------------------------------------------------------------/
     //Put Update Asks Notes
     @Put('accounts/:uid/asks/:aid/notes/:nid')
     updateAskNote() {

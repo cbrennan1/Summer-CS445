@@ -12,9 +12,14 @@ export class AsksService {
     public readonly asks: AsksModel[] = [];
     public counter = 0;
     constructor(private http: HttpService){}
+    static Actors = {
+        0: "RU",
+        1: "RU",
+        2: "CSR"
+    };
 
     //Create Asks Service
-    create(createAskDto: CreateAskDto): AsksModel {
+    createAsk(createAskDto: CreateAskDto): AsksModel {
         let aid = this.counter;
         let dc = new Date();
         const newAsk: AsksModel = {
@@ -26,31 +31,39 @@ export class AsksService {
         newAsk.aid = +newAsk.aid;
         this.asks.push(newAsk);
         this.counter ++;
-        //this.http.post('http://localhost:8080/bn/api/asks', newAsk)
-        console.log(newAsk)
-        console.log('New Ask From AsksServices')
+        this.postAsk(newAsk);
+        console.log(newAsk);
+        console.log('Above is the New Ask Created');
         return newAsk;
     }
-
+    
+    
+    postAsk(createAskDto: CreateAskDto){
+        this.doPostRequest(createAskDto);
+    }
     //Deactivate Asks Service
     deactivate(uid: number, aid: number): AsksModel {
+        //Error Handling
         if (!this.asks[aid]) {
-            throw new NotFoundException('Ask AID was not found, unable to deactivate.');
+            throw new NotFoundException('Error: Ask AID: ' +aid+ ' was not found, unable to deactivate.');
         } else if (uid != this.asks[aid].uid) {
-            throw new NotFoundException('Account UID is not valid, unable to deactivate.');
+            throw new NotFoundException('Error: Account UID: ' +uid+ ' is not valid, unable to deactivate.');
         }
+        //Deactivation of Ask
         this.asks[aid].is_active = false;
         return this.asks[aid];
     } 
     //Update Asks Service
     update(uid: number, aid: number, ask: AsksModel): void {
+        //Error Handling
         if (!this.asks[aid]) {
-            throw new NotFoundException('Ask AID was not found, unable to update.');
+            throw new NotFoundException('Error: Ask AID: ' +aid+ ' was not found, unable to update.');
         }else if (uid != this.asks[aid].uid) {
-            throw new NotFoundException('Account UID is not valid, unable to update.');
+            throw new NotFoundException('Error: Account UID: ' +uid+ ' is not valid, unable to update.');
         }else if (!this.asks[aid].is_active) {
-            throw new BadRequestException('Ask is not active, unable to update.')
+            throw new BadRequestException('Error: Ask: ' +aid+ ' is not active, unable to update.')
         }
+        //Updating Ask
         const updatedAsk: AsksModel = {
             ...ask
         };
@@ -61,16 +74,17 @@ export class AsksService {
     }
     //Delete Asks Service
     delete(uid: number, aid: number): void {
+        //Error Handling
         if (!this.asks[aid]) {
-            throw new NotFoundException('Ask AID was not found, unable to delete.');
+            throw new NotFoundException('Error: Ask AID: ' +aid+ ' is was not found, unable to delete.');
         }else if (uid != this.asks[aid].uid) {
-            throw new NotFoundException('Account UID is not valid, unable to delete.');
+            throw new NotFoundException('Error: Account UID: ' +uid+ ' is is not valid, unable to delete.');
         }
+        //Deleting Ask
         this.asks.splice(aid, 1);
     }
     //Get Users Asks
     getMyAsks(uid: number, is_active?: string): AsksModel[] {
-        // TO-DO: Process is_active
         if (uid) {
             if (is_active != null) {
                 let activeBoolean = is_active == 'true' ? true : false
@@ -88,7 +102,7 @@ export class AsksService {
                 return (ask.uid == uid);
             });
         }else {
-            throw new NotFoundException('Valid UID is required to find specified account Asks');
+            throw new NotFoundException('Error: The provided UID: ' +uid+ ' is not valid. UID is required to find specified account Asks.');
         }
     }
     //Find All Asks (CSR can see all Asks RU can see their asks)
@@ -101,7 +115,12 @@ export class AsksService {
             }
             //RU accounts are able to return the asks specified to their account.
             return this.asks.filter(ask => {
-                if (is_active != null) {
+                //Error Handling
+                if (is_active == null){
+                    throw new NotFoundException('Error: The provided role UID is not valid; account appears to be inactive. Valid UID is required to find specified account Asks.');
+                }
+                //Return All Asks for RU
+                else if (is_active != null) {
                     return this.asks.filter(ask => { 
                         return (ask.uid == v_by) && ask.is_active;
                     });
@@ -110,13 +129,15 @@ export class AsksService {
         } 
     }
     //Find Ask by AID
-    findOne(aid: number): AsksModel {
+    findOneAsk(aid: number): AsksModel {
         const ask: AsksModel = this.asks.find(ask => ask.aid == aid);
-
-        if (!ask) {
+        //Error Handling
+        if (ask == null) {
             throw new NotFoundException('Ask ' +aid+ ' was not found.');
         }
-        return ask;
+        //Return Singular Ask
+        else if (ask) {
+            return ask;}
     }
 
     //Search Asks
@@ -129,4 +150,13 @@ export class AsksService {
             // TO-DO: Process s_date & e_date 
             let askDescription = ask.description.toLowerCase();
             return askDescription.includes(key.toLowerCase()) });    }
+
+    doPostRequest(newAsk: AsksModel) {
+        let payload = newAsk;
+        let res = this.http.post('http://localhost:8080/bn/api/asks', payload);
+        console.log(payload);
+        return res;
+    }
 }
+
+

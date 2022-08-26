@@ -1,5 +1,5 @@
 //Imports
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException, Param, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException, Param, ParseIntPipe, HttpCode, HttpStatus, HttpException } from '@nestjs/common';
 import { CreateAccountDto } from '../dto/dto.accounts';
 import { AccountModel } from './accounts.interface';
 
@@ -9,7 +9,8 @@ export class AccountsService {
     public counter = 0;
     static Actors = {
         0: "RU",
-        1: "CSR"
+        1: "RU",
+        2: "CSR"
     };
 
     //Three Initial Provided Accounts
@@ -73,24 +74,34 @@ export class AccountsService {
 
     //Activate Account Service
     activate(uid: number): AccountModel {
+        //Error Handling
         if (uid == null || typeof uid != 'number') {
-            throw new BadRequestException('UID is not allowed to be null and must be of type: "Number".')
+            throw new BadRequestException('Error: UID: ' +uid+ '  is not allowed to be null and must be of type: "Number".')
         }
         if (!this.accounts[uid]) {
-            throw new NotFoundException('Account UID was not found, unable to ACTIVATE.');
+            throw new NotFoundException('Error: Account UID ' +uid+ '  was not found, unable to activate.');
         }
+        //Activate Account
         this.accounts[uid].is_active = true;
         return this.accounts[uid];
     } 
 
     //Update Account Service
     update(uid: number, account: AccountModel): void {
+        //Error Handling
         if (!this.accounts[uid]) {
-            throw new NotFoundException('Account UID not found, unable to UPDATE');
+            throw new NotFoundException('Error: Account UID ' +uid+ '  not found, unable to update.');
         }
         if (account.is_active != this.accounts[uid].is_active && account.is_active == true) {
-            throw new BadRequestException('Can not activate account by UPDATING');
+            throw new HttpException({
+            status: HttpStatus.BAD_REQUEST,
+            type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
+            detail: 'You may not use PUT to activate an account, use GET /accounts/'+uid+'/activate instead',
+            instance: '/accounts/'+uid,
+            title: 'Your request data didn\'t pass validation',
+          }, HttpStatus.BAD_REQUEST);
         }
+        //Update Account
         let updatedAccount: AccountModel = {
             ...account
         };
@@ -101,9 +112,11 @@ export class AccountsService {
 
     //Delete Account Service
     delete(uid: number): void {
+        //Error Handling
         if (!this.accounts[uid]) {
-            throw new NotFoundException('Account UID was not found, unable to DELETE.');
+            throw new NotFoundException('Error: Account UID ' +uid+ ' was not found, unable to delete.');
         }
+        //Delete Account
         this.accounts.splice(uid, 1);
     }
 
@@ -127,10 +140,11 @@ export class AccountsService {
     //Find Account by UID
     findOne(uid: number): AccountModel {
         const account: AccountModel = this.accounts.find(account => account.uid === uid);
-
+        //Error Handling
         if (!account) {
-            throw new NotFoundException('Account was not found.');
+            throw new NotFoundException('Error: Account UID: ' +uid+ '  was not found.');
         }
+        //Return Singular Account
         return account;
     }
 }
