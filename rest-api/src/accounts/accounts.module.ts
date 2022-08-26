@@ -7,10 +7,12 @@ import { NotesService } from '../notes/notes.service';
 import { ReportsService } from '../reports/reports.service';
 import { ThanksService } from '../thanks/thanks.service';
 import { HttpModule } from '@nestjs/axios';
+import { AsksController } from '../asks/asks.controller';
+import { GivesController } from '../gives/gives.controller';
 
 
 @Module({
-  controllers: [AccountsController],
+  controllers: [AccountsController, AsksController, GivesController],
   providers: [AccountsService, AsksService, GivesService, NotesService, ReportsService, ThanksService],
   exports: [AccountsService],
   imports: [HttpModule]

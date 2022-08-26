@@ -4,6 +4,7 @@ import { AsksModel } from './asks.interface';
 import { CreateAskDto } from '../dto/dto.asks';
 import { AccountsService } from '../accounts/accounts.service';
 import { HttpService } from '@nestjs/axios';
+import { config, map } from 'rxjs';
 
 
 @Injectable()
@@ -31,7 +32,8 @@ export class AsksService {
         newAsk.aid = +newAsk.aid;
         this.asks.push(newAsk);
         this.counter ++;
-        this.postAsk(newAsk);
+        //this.postAsk(newAsk);
+        //this.http.post('http://localhost:8080/bn/api/asks', newAsk)
         console.log(newAsk);
         console.log('Above is the New Ask Created');
         return newAsk;
@@ -40,6 +42,15 @@ export class AsksService {
     
     postAsk(createAskDto: CreateAskDto){
         this.doPostRequest(createAskDto);
+        
+    }
+    doPostRequest(createAskDto: AsksModel) {
+        const params = JSON.stringify(createAskDto);
+        let res = this.http.post('http://localhost:8080/bn/api/asks', params)
+        .pipe(
+            map(res => res.data));
+        console.log('doPostRequest completed');
+        return res;
     }
     //Deactivate Asks Service
     deactivate(uid: number, aid: number): AsksModel {
@@ -114,7 +125,8 @@ export class AsksService {
                 return this.asks;
             }
             //RU accounts are able to return the asks specified to their account.
-            return this.asks.filter(ask => {
+            else if (Actor === "RU"){
+                return this.asks.filter(ask => {
                 //Error Handling
                 if (is_active == null){
                     throw new NotFoundException('Error: The provided role UID is not valid; account appears to be inactive. Valid UID is required to find specified account Asks.');
@@ -125,12 +137,13 @@ export class AsksService {
                         return (ask.uid == v_by) && ask.is_active;
                     });
                 } 
-            });
+            });}
         } 
     }
     //Find Ask by AID
     findOneAsk(aid: number): AsksModel {
-        const ask: AsksModel = this.asks.find(ask => ask.aid == aid);
+        
+        const ask: AsksModel = this.asks.find(ask => ask.aid === aid);
         //Error Handling
         if (ask == null) {
             throw new NotFoundException('Ask ' +aid+ ' was not found.');
@@ -151,12 +164,7 @@ export class AsksService {
             let askDescription = ask.description.toLowerCase();
             return askDescription.includes(key.toLowerCase()) });    }
 
-    doPostRequest(newAsk: AsksModel) {
-        let payload = newAsk;
-        let res = this.http.post('http://localhost:8080/bn/api/asks', payload);
-        console.log(payload);
-        return res;
-    }
+
 }
 
 

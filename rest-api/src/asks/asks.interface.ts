@@ -9,3 +9,4 @@ export interface AsksModel {
     is_active: boolean;
     date_created: string|Date|null;
 }
+

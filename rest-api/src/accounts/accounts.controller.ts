@@ -1,5 +1,5 @@
 //Imports
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode, HttpException, BadRequestException, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Header, HttpStatus, HttpCode, HttpException, BadRequestException, Res, Redirect } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { AsksService } from '../asks/asks.service'
 import { GivesService } from '../gives/gives.service';
@@ -60,6 +60,12 @@ export class AccountsController {
     findOneAccount(@Param('uid') uid: string): AccountModel {
         return this.accountsService.findOne(parseInt(uid));
     }
+
+    //Get Find Account by UID
+    @Get('accounts/3/ask')
+    findOneAsk(@Param('aid') aid: string): AsksModel {
+        return this.asksService.findOneAsk(parseInt(aid));
+    }
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Asks
 //------------------------------------------------------------------------------------------------------------------------------/
@@ -104,22 +110,7 @@ export class AccountsController {
     getMyAsks(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: string}) {
         return this.asksService.getMyAsks(uid, query.is_active);
     }
-    //Testing
-/*  
-    @Get('accounts/:uid/asks/:aid')
-    getUsersAsk(@Param('uid') uid: string, @Param('aid') aid: string,){
-        if (!this.accountsService.accounts[uid].is_active) {
-            throw new HttpException({
-                status: HttpStatus.BAD_REQUEST,
-                type: 'http://cs.iit.edu/~virgil/cs445/mail.spring2022/project/api/problems/data-validation',
-                detail: 'This account ' +uid+ ' is not active an may not create an ask.',
-                instance: '/accounts/'+uid,
-                title: 'Your request data didn\'t pass validation',
-              }, HttpStatus.BAD_REQUEST);
-        }
-        return this.asksService.getMyAsks(parseInt(uid), aid);
-    } 
-*/
+
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Gives
 //------------------------------------------------------------------------------------------------------------------------------/
