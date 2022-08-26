@@ -110,13 +110,16 @@ export class AccountsService {
     // Search ALL accounts or add optional queries
     findAll(key?: string, start_date?: Date, end_date?: Date): AccountModel[] {
         if (key) {
+            if (start_date || end_date) {
+                return this.accounts.filter(account => { 
+                    let accountName = account.name.toLowerCase();
+                    let accountAddressStreet = account.address.street.toLowerCase();    
+                    return (accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase()) || account.address.zip.includes(key) || account.phone.includes(key)) && ((account.date_created > start_date) && (account.date_created < end_date))});
+            }
             return this.accounts.filter(account => { 
-                // Start Date End Date are WIP
-                let accountE_Date = end_date;
-                let accountS_Date = start_date;
                 let accountName = account.name.toLowerCase();
                 let accountAddressStreet = account.address.street.toLowerCase();
-                return accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase())  || account.address.zip.includes(key) || account.phone.includes(key)});
+                return accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase()) || account.address.zip.includes(key) || account.phone.includes(key) });
         }
         return this.accounts;
     }
