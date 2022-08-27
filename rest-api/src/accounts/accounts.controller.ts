@@ -83,8 +83,6 @@ export class AccountsController {
         }
         let locationHeader = '/accounts/' + createAskDto.uid + '/asks/' + this.asksService.counter;
         res.header('Location', locationHeader);
-        //this.asksService.postAsk(createAskDto);
-        console.log("Asks Service Post Ask has been called from Account Controller");
         return this.asksService.createAsk(createAskDto);
     }
 

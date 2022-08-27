@@ -10,7 +10,9 @@ export class GivesService {
     static Actors = {
         0: "RU",
         1: "RU",
-        2: "CSR"
+        2: "RU",
+        3: "RU",
+        4: "CSR"
     };
     //Create Give Service
     create(createGiveDto: CreateGiveDto): GivesModel {

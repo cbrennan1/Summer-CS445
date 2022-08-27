@@ -10,7 +10,9 @@ export class AccountsService {
     static Actors = {
         0: "RU",
         1: "RU",
-        2: "CSR"
+        2: "RU",
+        3: "RU",
+        4: "CSR"
     };
 
     //Three Initial Provided Accounts

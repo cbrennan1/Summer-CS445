@@ -16,7 +16,9 @@ export class AsksService {
     static Actors = {
         0: "RU",
         1: "RU",
-        2: "CSR"
+        2: "RU",
+        3: "RU",
+        4: "CSR"
     };
 
     //Create Asks Service
@@ -32,10 +34,6 @@ export class AsksService {
         newAsk.aid = +newAsk.aid;
         this.asks.push(newAsk);
         this.counter ++;
-        //this.postAsk(newAsk);
-        //this.http.post('http://localhost:8080/bn/api/asks', newAsk)
-        console.log(newAsk);
-        console.log('Above is the New Ask Created');
         return newAsk;
     }
     
@@ -49,7 +47,6 @@ export class AsksService {
         let res = this.http.post('http://localhost:8080/bn/api/asks', params)
         .pipe(
             map(res => res.data));
-        console.log('doPostRequest completed');
         return res;
     }
     //Deactivate Asks Service
