@@ -185,11 +185,13 @@ export class AccountsController {
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Notes
 //------------------------------------------------------------------------------------------------------------------------------/
-    //Put Update Asks Notes
+    //Put Update Asks 
+    /*
     @Put('accounts/:uid/asks/:aid/notes/:nid')
     updateAskNote() {
-        return this.notesService.updateAskNote();
+        return this.notesService.update();
     }
+    */
     //Put Update Gives Notes
     @Put('accounts/:uid/gives/:gid/notes/:nid')
     updateGiveNote() {

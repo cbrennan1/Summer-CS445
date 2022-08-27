@@ -107,17 +107,17 @@ export class GivesService {
                         let isFalse = (is_active == 'false');
                         if (!isTrue || !isFalse) {
                             return this.gives.filter(give => { 
-                                return (give.uid == v_by);
+                                return (give.uid == v_by && give.is_active == true);
                             });
                         }
                         let activeBoolean = is_active == 'true' ? true : false
                         if (activeBoolean) {
                             return this.gives.filter(give => { 
-                                return (give.uid == v_by) && give.is_active;
+                                return (give.uid == v_by && give.is_active == activeBoolean);
                             });
                         }else if (!activeBoolean) {
                             return this.gives.filter(give => { 
-                                return (give.uid == v_by) && !give.is_active;
+                                return (give.uid == v_by && give.is_active);
                             });
                         }                
                     }    

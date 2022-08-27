@@ -114,15 +114,16 @@ export class AsksService {
         }
     }
     //Find All Asks (CSR can see all Asks RU can see their asks)
-    findAll(v_by: number, is_active?): AsksModel[] {
+    findAll(v_by: string, is_active?): AsksModel[] {
         if (v_by) {
             //CSR accounts are able to view all Asks in the system.
             const Actor = AccountsService.Actors[v_by];
-            if (Actor === "CSR"){
+            //if (Actor === "CSR"){
+            if (parseInt(v_by) == 4){  
                 return this.asks;
             }
             //RU accounts are able to return the asks specified to their account.
-            else if (Actor === "RU"){
+            else if (parseInt(v_by) !== 4){
                 return this.asks.filter(ask => {
                 //Error Handling
                 if (is_active == null){
@@ -131,7 +132,7 @@ export class AsksService {
                 //Return All Asks for RU
                 else if (is_active != null) {
                     return this.asks.filter(ask => { 
-                        return (ask.uid == v_by) && ask.is_active;
+                        return (ask.uid == parseInt(v_by) && ask.is_active);
                     });
                 } 
             });}
@@ -149,17 +150,6 @@ export class AsksService {
         else if (ask) {
             return ask;}
     }
-
-    //Search Asks
-    searchAsks(key?: string, start_date?: Date, end_date?: Date): AsksModel[] {
-        if (!key || key === null) {
-            return this.asks;
-            // throw new BadRequestException('User must be identified before requesting to view asks')
-        }
-        return this.asks.filter(ask => { 
-            // TO-DO: Process s_date & e_date 
-            let askDescription = ask.description.toLowerCase();
-            return askDescription.includes(key.toLowerCase()) });    }
 
 
 }
