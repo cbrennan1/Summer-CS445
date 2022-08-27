@@ -28,8 +28,6 @@ export class NotesService {
         //Error Handling
         if (!this.notes[nid]) {
             throw new NotFoundException('Error: Ask AID: ' +nid+ ' was not found, unable to update.');
-        }else if (uid != this.notes[nid].uid) {
-            throw new NotFoundException('Error: Account UID: ' +uid+ ' is not valid, unable to update.');
         }
         //Updating Ask
         const updatedNotes: NotesModel = {
