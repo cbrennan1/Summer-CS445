@@ -138,20 +138,17 @@ export class NotesService {
     }
     //Find All Notes Service
     findAll(): NotesConversationModel[] {
-        console.log("Find All Called\n")
         return this.conversations;
     }
     //View Notes with no c_by Service
     viewNotesTwo(v_by: number, type?: string, agid?: number): NotesConversationModel[] {
         if (v_by != null) {
-                console.log("Just View Called");
                 return this.conversations.map(conversation => {
                     conversation.conversations = conversation.conversations.filter(element => element.with_uid == v_by)
                     return conversation;
                 })}}
     //View Notes with c_by service
     viewNotes(c_by?: number, v_by?: number, type?: string, agid?: number): NotesModel[] | NotesConversationModel[] {
-        console.log("View Notes Called the c_by is:"+c_by+'\n');
                 return this.conversations.filter(thread => { 
                     return (thread.uid == c_by)
                 });

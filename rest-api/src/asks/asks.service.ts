@@ -116,14 +116,11 @@ export class AsksService {
         if (v_by) {
             //CSR accounts are able to view all Asks in the system.
             const Actor = this.Actors[v_by];
-            console.log("The View By is: "+v_by+" and the Actor is: "+Actor);
             if (Actor == "CSR"){
-                console.log("CSR Ask Role Called");
                 return this.asks;
             }
             //RU accounts are able to return the asks specified to their account.
             else if (Actor == "RU"){
-                console.log("RU Ask Role Called");
                 //Return All Asks for RU
                 //Error Handling
                 if (is_active == null){
