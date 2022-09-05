@@ -5,7 +5,7 @@ export interface GivesModel {
     description: string;
     start_date: string;
     end_date: string;
-    extra_zip: [number, number];
+    extra_zip: [string, string];
     is_active: boolean;
     date_created: string|Date|null;}
 

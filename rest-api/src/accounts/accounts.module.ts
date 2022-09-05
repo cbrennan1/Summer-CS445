@@ -10,10 +10,11 @@ import { HttpModule } from '@nestjs/axios';
 import { AsksController } from '../asks/asks.controller';
 import { GivesController } from '../gives/gives.controller';
 import { ThanksController } from '../thanks/thanks.controller';
+import { ReportsController } from '../reports/reports.controller';
 
 
 @Module({
-  controllers: [AccountsController, AsksController, GivesController, ThanksController],
+  controllers: [AccountsController, AsksController, GivesController, ThanksController, ReportsController],
   providers: [AccountsService, AsksService, GivesService, NotesService, ReportsService, ThanksService],
   exports: [AccountsService],
   imports: [HttpModule]

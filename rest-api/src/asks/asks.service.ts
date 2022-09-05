@@ -13,12 +13,10 @@ export class AsksService {
     public readonly asks: AsksModel[] = [];
     public counter = 0;
     constructor(private http: HttpService){}
-    static Actors = {
+    private Actors = {
         0: "RU",
         1: "RU",
-        2: "RU",
-        3: "RU",
-        4: "CSR"
+        2: "CSR"
     };
 
     //Create Asks Service
@@ -114,28 +112,29 @@ export class AsksService {
         }
     }
     //Find All Asks (CSR can see all Asks RU can see their asks)
-    findAll(v_by: string, is_active?): AsksModel[] {
+    findAll(v_by: number, is_active: boolean): AsksModel[] {
         if (v_by) {
             //CSR accounts are able to view all Asks in the system.
-            const Actor = AccountsService.Actors[v_by];
-            //if (Actor === "CSR"){
-            if (parseInt(v_by) == 4){  
+            const Actor = this.Actors[v_by];
+            console.log("The View By is: "+v_by+" and the Actor is: "+Actor);
+            if (Actor == "CSR"){
+                console.log("CSR Ask Role Called");
                 return this.asks;
             }
             //RU accounts are able to return the asks specified to their account.
-            else if (parseInt(v_by) !== 4){
-                return this.asks.filter(ask => {
+            else if (Actor == "RU"){
+                console.log("RU Ask Role Called");
+                //Return All Asks for RU
                 //Error Handling
                 if (is_active == null){
                     throw new NotFoundException('Error: The provided role UID is not valid; account appears to be inactive. Valid UID is required to find specified account Asks.');
                 }
-                //Return All Asks for RU
-                else if (is_active != null) {
+                if (is_active != null) {
                     return this.asks.filter(ask => { 
-                        return (ask.uid == parseInt(v_by) && ask.is_active);
+                        return (ask.uid == 3 && ask.type == 'gift');
                     });
                 } 
-            });}
+            }
         } 
     }
     //Find Ask by AID

@@ -145,13 +145,10 @@ export class NotesService {
     viewNotesTwo(v_by: number, type?: string, agid?: number): NotesConversationModel[] {
         if (v_by != null) {
                 console.log("Just View Called");
-                return this.conversations.filter(thread => {
-                    return (thread.conversations.filter(notethread => {
-                        console.log("noteThread.withuid = "+notethread.with_uid+" and v_by is = "+v_by+'.\n')
-                        return notethread.with_uid == v_by;
-                    }))
-                }) 
-            }}
+                return this.conversations.map(conversation => {
+                    conversation.conversations = conversation.conversations.filter(element => element.with_uid == v_by)
+                    return conversation;
+                })}}
     //View Notes with c_by service
     viewNotes(c_by?: number, v_by?: number, type?: string, agid?: number): NotesModel[] | NotesConversationModel[] {
         console.log("View Notes Called the c_by is:"+c_by+'\n');
@@ -169,13 +166,10 @@ export class NotesService {
         return note;
     }
     //Search Notes Service
-    searchNotes(key?: string, start_date?: Date, end_date?: Date): NotesModel[] {
+    searchNotes(key?: string): NotesModel[] {
         if (key) {
-            return this.notes.filter(note => { 
-                let noteDescription = note.description.toLowerCase();
-                return noteDescription.includes(key.toLowerCase()) });
+            return [];
         }
-        return this.notes;
     }
 
 }

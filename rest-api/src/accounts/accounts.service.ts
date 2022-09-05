@@ -7,12 +7,10 @@ import { AccountModel } from './accounts.interface';
 export class AccountsService {
     //Counter and Actor Declerations
     public counter = 0;
-    static Actors = {
+    private Actors = {
         0: "RU",
         1: "RU",
-        2: "RU",
-        3: "RU",
-        4: "CSR"
+        2: "CSR"
     };
 
     //Three Initial Provided Accounts

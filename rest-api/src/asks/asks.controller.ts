@@ -12,7 +12,7 @@ export class AsksController {
 
     //Get Find Asks (Dependent on v_by and Actor)
     @Get('asks')
-    findAsks(@Query() query: { v_by: string, is_active?: string}): AsksModel[] {
+    findAsks(@Query() query: { v_by: number, is_active?: boolean}): AsksModel[] {
         return this.asksService.findAll(query.v_by, query.is_active);
     }
     //Get Find One Ask Using AID

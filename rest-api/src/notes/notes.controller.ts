@@ -20,21 +20,19 @@ export class NotesController {
     updateNote(@Param('nid', ParseIntPipe) nid: number, @Body() note: NotesModel): void{
         return this.notesService.update(nid, note);
     }
-    //Get 
-    /*
+
+    
     @Get('notes')
-    findNotes(): NotesConversationModel[] {
-        return this.notesService.findAll();
-    }
-    */
-    @Get('notes')
-    viewNotes(@Query() query?: { c_by?: string, v_by?: string, type?: string, agid?: string}, ): NotesModel[] | NotesConversationModel[] {
+    viewNotes(@Query() query?: { c_by?: string, v_by?: string, type?: string, agid?: string, key?: string}, ): NotesModel[] | NotesConversationModel[] {
         if (query.c_by){
         return this.notesService.viewNotes(parseInt(query.c_by), parseInt(query.v_by), query.type, parseInt(query.agid));
         }
         if (query.v_by && !query.c_by){
             return this.notesService.viewNotesTwo(parseInt(query.v_by), query.type, parseInt(query.agid));
             }
+        if (query.key){
+            return []
+        }
         else {return this.notesService.findAll();}
     }
 }

@@ -5,15 +5,15 @@ import { GivesModel } from './gives.interface';
 
 @Injectable()
 export class GivesService {
-    private readonly gives: GivesModel[] = [];
+    public readonly gives: GivesModel[] = [];
     public counter = 0;
-    static Actors = {
+    private Actors = {
         0: "RU",
         1: "RU",
-        2: "RU",
-        3: "RU",
-        4: "CSR"
+        2: "CSR"
     };
+    constructor (private accountsService: AccountsService){}
+
     //Create Give Service
     create(createGiveDto: CreateGiveDto): GivesModel {
         let gid = this.counter;
@@ -99,50 +99,28 @@ export class GivesService {
         //Return Gives Service
         //Regular User can see their Gives
         else if (v_by || is_active){
-            const Actor = AccountsService.Actors[v_by];
+            const Actor = this.Actors[v_by];
             if (Actor === "RU"){
                 return this.gives.filter(give => {
-                    if (is_active != null) {
-                        let isTrue = (is_active == 'true');
-                        let isFalse = (is_active == 'false');
-                        if (!isTrue || !isFalse) {
-                            return this.gives.filter(give => { 
-                                return (give.uid == v_by && give.is_active == true);
-                            });
-                        }
-                        let activeBoolean = is_active == 'true' ? true : false
-                        if (activeBoolean) {
-                            return this.gives.filter(give => { 
-                                return (give.uid == v_by && give.is_active == activeBoolean);
-                            });
-                        }else if (!activeBoolean) {
-                            return this.gives.filter(give => { 
-                                return (give.uid == v_by && give.is_active);
-                            });
-                        }                
-                    }    
-                });
+                    let visibleAccountIndex = this.accountsService.accounts.findIndex(account => account.uid == v_by);
+                    let visibleZip = this.accountsService.accounts[visibleAccountIndex].address.zip
+                    return give.uid == v_by || give.extra_zip.includes(visibleZip); 
+                })
         }
         //CSR can see all Gives
         else if (Actor === "CSR"){
-            if (is_active != null) {
-                let isTrue = (is_active == 'true');
-                let isFalse = (is_active == 'false');
-                if (!isTrue || !isFalse) {
-                    return this.gives;
-                }
-
-                let activeBoolean = is_active == 'true' ? true : false
+            if (is_active) { 
+                let activeBoolean = is_active == 'true' ? true : 'false' ? false : null
                 if (activeBoolean) {
                     return this.gives.filter(give => { 
-                        return (give.uid == v_by) && give.is_active;
+                        return give.is_active == true;
                     });
                 }else if (!activeBoolean) {
                     return this.gives.filter(give => { 
-                        return (give.uid == v_by) && !give.is_active;
+                        return give.is_active == false;
                     });
                 }                
-            }    
+            }  
             return this.gives;
         }
     }}
