@@ -185,38 +185,14 @@ export class AccountsController {
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Notes
 //------------------------------------------------------------------------------------------------------------------------------/
-    //Put Update Asks 
-    /*
-    @Put('accounts/:uid/asks/:aid/notes/:nid')
-    updateAskNote() {
-        return this.notesService.update();
-    }
-    */
-    //Put Update Gives Notes
-    @Put('accounts/:uid/gives/:gid/notes/:nid')
-    updateGiveNote() {
-        return this.notesService.updateGiveNote();
-    }
-
-    //Delete Delete Asks Notes
-    @Delete('accounts/:uid/asks/:aid/notes/:nid')
-    deleteAskNote() {
-        return this.notesService.deleteAskNote();
-    }
-    //Delete Delete Gives Notes
-    @Delete('accounts/:uid/gives/:gid/notes/:nid')
-    deleteGiveNote() {
-        return this.notesService.deleteGiveNote();
-    }
-
     //Get View Asks Notes
     @Get('accounts/:uid/asks/:aid/notes/:nid')
     getAskNotes() {
-        return this.notesService.viewNotes();
+        return this.notesService.findAll();
     }
     //Get View Gives Notes
     @Get('accounts/:uid/gives/:gid/notes/:nid')
     getGiveNotes() {
-        return this.notesService.viewNotes();
+        return this.notesService.findAll();
     }
 }
