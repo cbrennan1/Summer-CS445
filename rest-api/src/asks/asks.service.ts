@@ -11,6 +11,7 @@ import { config, map } from 'rxjs';
 export class AsksService {
     //Counter and Asks Decleration
     public readonly asks: AsksModel[] = [];
+
     public counter = 0;
     constructor(private http: HttpService){}
     private Actors = {

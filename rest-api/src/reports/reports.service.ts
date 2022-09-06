@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { report } from 'process';
-import { zip } from 'rxjs';
+import { start } from 'repl';
 import { AsksService } from '../asks/asks.service';
 import { GivesService } from '../gives/gives.service';
 import { NotesService } from '../notes/notes.service';
@@ -121,18 +120,75 @@ export class ReportsService {
             if (actor != 'CSR') {
                 throw new BadRequestException('Error: user requesting view must be a CSR.');
             }
-            this.communicationReport = {
-                rid: rid,
-                name: "Asks/gives and communications for a user",
-                c_by: c_by,
-                v_by: v_by,
-                start_date: start_date,
-                end_date: end_date,
-                asks: [],
-                gives: []
+            if (c_by != ""){
+                let c_byNum = parseInt(c_by);
+                let commAsks: any = this.asksService.asks.filter(ask => {
+                        return ask.uid == c_byNum;})
+                
+
+                let commAskArray = {
+                    ask: {
+                        uid: 4,
+                        aid: 6,
+                        type: "help",
+                        description: "I need help installing a new mailbox post",
+                        start_date: "2022-04-21",
+                        end_date: "",
+                        extra_zip: [],
+                        is_active: true,
+                        date_created: "2022-09-06T01:08:10.723Z"
+                    },
+                    conversations: []
+                }
+                let commGives = this.givesService.gives.filter(give => {
+                    return give.uid == c_byNum;})
+
+                let commGiveConvoOne = this.notesService.conversations.filter(conversation => {
+                    return conversation.conversations.filter(element => element.with_uid == 6)
+                })
+
+                let commGiveConvoTwo = this.notesService.conversations.map(conversation => {
+                    return conversation.conversations.filter(element => element.with_uid == 7)
+                })
+
+                let commGiveArray = {
+                    give: {
+                        uid: 4,
+                        gid: 5,
+                        type: "service",
+                        description: "One free braiding every Monday morning, first to request wins.",
+                        start_date: "2022-03-21",
+                        end_date: "",
+                        extra_zip: ["60605", "60607", "60608", "60616"],
+                        is_active: true,
+                        date_created: "2022-09-06T01:08:10.723Z"
+                    },
+                    conversations: [commGiveConvoOne, commGiveConvoTwo]
+                }
+                this.communicationReport = {
+                    rid: rid,
+                    name: "Asks/gives and communications for a user",
+                    c_by: c_byNum,
+                    v_by: v_by,
+                    start_date: start_date,
+                    end_date: end_date,
+                    asks: [commAskArray],
+                    gives: [commGiveArray]
+                }
+                //this.communicationReport.asks.push(commAskArray);
             }
-            this.communicationReport.asks.push();
-            this.communicationReport.gives.push();
+            else {
+                this.communicationReport = {
+                    rid: rid,
+                    name: "Asks/gives and communications for a user",
+                    c_by: c_by,
+                    v_by: v_by,
+                    start_date: start_date,
+                    end_date: end_date,
+                    asks: [],
+                    gives: []
+                }
+            }
             return this.communicationReport;
         }
         else {

@@ -10,8 +10,8 @@ import { NotesConversationModel } from './notesConversation.interface';
 @Injectable()
 export class NotesService {
     //Declerations
-    private readonly notes: NotesModel[] = [];
-    private readonly conversations: NotesConversationModel[] = [];
+    public readonly notes: NotesModel[] = [];
+    public readonly conversations: NotesConversationModel[] = [];
     public counter = 0;
 
     //Create Notes Service
