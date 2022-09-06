@@ -30,7 +30,7 @@ export class AccountsController {
     @Post('accounts')
     create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res) {
         let locationHeader = '/accounts/' + this.accountsService.counter;
-        res.header('Location', locationHeader);
+        res.setHeader('Location', locationHeader);
         return this.accountsService.create(createAccountDto);
     }
     //Get Activate Account

@@ -62,6 +62,21 @@ export class AccountsService {
     //Create Account Service
     create(createAccountDto: CreateAccountDto): AccountModel {
         // find the next id for a new account
+        if (createAccountDto.name == null){
+            throw new BadRequestException('Error: A valid name is required to create an account.')
+        }
+        if (createAccountDto.address.zip == null){
+            throw new BadRequestException('Error: A valid zip code is required to create an account.')
+        }
+        if (createAccountDto.address.street == null){
+            throw new BadRequestException('Error: A valid street is required to create an account.')
+        }
+        if (createAccountDto.phone == null){
+            throw new BadRequestException('Error: A valid phone number is required to create an account.')
+        }
+        if (createAccountDto.picture == null){
+            throw new BadRequestException('Error: A valid picture link is required to create an account.')
+        }
         let uid = this.counter;
         const newAccount: AccountModel = {
             ...createAccountDto,
