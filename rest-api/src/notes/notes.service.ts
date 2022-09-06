@@ -1,7 +1,4 @@
 import { All, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { zipAll } from 'rxjs';
-import { runInThisContext } from 'vm';
-import { AsksModel } from '../asks/asks.interface';
 import { NotesCreationDto } from '../dto/dto.notes';
 import { NotesModel } from './notes.interface';
 import { NotesConversationModel } from './notesConversation.interface';
