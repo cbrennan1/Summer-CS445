@@ -135,6 +135,17 @@ export class AccountsService {
         this.accounts.splice(uid, 1);
     }
 
+    //Find Account by UID
+    findOne(uid: number): AccountModel {
+        const account: AccountModel = this.accounts.find(account => account.uid === uid);
+        //Error Handling
+        if (!account) {
+            throw new NotFoundException('Error: Account UID: ' +uid+ '  was not found.');
+        }
+        //Return Singular Account
+        return account;
+    }
+
     // Search ALL accounts or add optional queries
     findAll(key?: string, start_date?: Date, end_date?: Date): AccountModel[] {
         if (key) {
@@ -150,16 +161,5 @@ export class AccountsService {
                 return accountName.includes(key.toLowerCase()) || accountAddressStreet.includes(key.toLowerCase()) || account.address.zip.includes(key) || account.phone.includes(key) });
         }
         return this.accounts;
-    }
-
-    //Find Account by UID
-    findOne(uid: number): AccountModel {
-        const account: AccountModel = this.accounts.find(account => account.uid === uid);
-        //Error Handling
-        if (!account) {
-            throw new NotFoundException('Error: Account UID: ' +uid+ '  was not found.');
-        }
-        //Return Singular Account
-        return account;
     }
 }

@@ -36,18 +36,6 @@ export class AsksService {
         return newAsk;
     }
     
-    
-    postAsk(createAskDto: CreateAskDto){
-        this.doPostRequest(createAskDto);
-        
-    }
-    doPostRequest(createAskDto: AsksModel) {
-        const params = JSON.stringify(createAskDto);
-        let res = this.http.post('http://localhost:8080/bn/api/asks', params)
-        .pipe(
-            map(res => res.data));
-        return res;
-    }
     //Deactivate Asks Service
     deactivate(uid: number, aid: number): AsksModel {
         //Error Handling
@@ -112,6 +100,17 @@ export class AsksService {
             throw new NotFoundException('Error: The provided UID: ' +uid+ ' is not valid. UID is required to find specified account Asks.');
         }
     }
+    //Find Ask by AID
+    findOneAsk(aid: number): AsksModel {   
+        const ask: AsksModel = this.asks.find(ask => ask.aid === aid);
+        //Error Handling
+        if (ask == null) {
+            throw new NotFoundException('Error: Ask ' +aid+ ' was not found.');
+        }
+        //Return Singular Ask
+        else if (ask) {
+            return ask;}
+    }
     //Find All Asks (CSR can see all Asks RU can see their asks)
     findAll(v_by: number, is_active: boolean): AsksModel[] {
         if (v_by) {
@@ -123,32 +122,14 @@ export class AsksService {
             //RU accounts are able to return the asks specified to their account.
             else if (Actor == "RU"){
                 //Return All Asks for RU
-                //Error Handling
-                if (is_active == null){
-                    throw new NotFoundException('Error: The provided role UID is not valid; account appears to be inactive. Valid UID is required to find specified account Asks.');
-                }
-                if (is_active != null) {
                     return this.asks.filter(ask => { 
                         return (ask.uid == 3 && ask.type == 'gift');
                     });
-                } 
             }
         } 
-    }
-    //Find Ask by AID
-    findOneAsk(aid: number): AsksModel {
-        
-        const ask: AsksModel = this.asks.find(ask => ask.aid === aid);
-        //Error Handling
-        if (ask == null) {
-            throw new NotFoundException('Ask ' +aid+ ' was not found.');
+        else {
+            throw new NotFoundException("Error: VBy must be specified")
         }
-        //Return Singular Ask
-        else if (ask) {
-            return ask;}
     }
-
 
 }
-
-
