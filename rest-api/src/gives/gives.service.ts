@@ -65,7 +65,7 @@ export class GivesService {
         this.gives.splice(gid, 1);
     }
     //Obtain User's Gives Service
-    getMyGives(uid: number, is_active?: string): GivesModel[] {
+    getMyGives(uid: number, is_active?: string|boolean): GivesModel[] {
         //Error Handling
         if (!uid){
             throw new NotFoundException('Error: Valid UID is required to find specified account Gives. Provided UID: ' +uid+ ' is not valid.');
@@ -90,7 +90,7 @@ export class GivesService {
         }
     }
     //Find All Gives Service
-    findAll(v_by: number, is_active?: string): GivesModel[] {
+    findAll(v_by: number, is_active: boolean|string): GivesModel[] {
         //Error Handling
         if (!v_by) {
             throw new BadRequestException('Error: UID must be identified before requesting viewing access.')
@@ -98,32 +98,34 @@ export class GivesService {
 
         //Return Gives Service
         //Regular User can see their Gives
-        else if (v_by || is_active){
+        else if (v_by){
             const Actor = this.Actors[v_by];
             if (Actor === "RU"){
                 return this.gives.filter(give => {
                     let visibleAccountIndex = this.accountsService.accounts.findIndex(account => account.uid == v_by);
-                    let visibleZip = this.accountsService.accounts[visibleAccountIndex].address.zip
-                    return give.uid == v_by || give.extra_zip.includes(visibleZip); 
+                    let visibleZip = this.accountsService.accounts[visibleAccountIndex].address.zip;
+                    let partialResponse = give.extra_zip.includes(visibleZip);
+                    let partialResponse2 = give.uid == v_by;
+                    return partialResponse2 || partialResponse;
                 })
         }
         //CSR can see all Gives
-        else if (Actor === "CSR"){
-            if (is_active) { 
-                let activeBoolean = is_active == 'true' ? true : 'false' ? false : null
-                if (activeBoolean) {
-                    return this.gives.filter(give => { 
-                        return give.is_active == true;
-                    });
-                }else if (!activeBoolean) {
-                    return this.gives.filter(give => { 
-                        return give.is_active == false;
-                    });
-                }                
-            }  
-            return this.gives;
-        }
-    }}
+            else if (Actor === "CSR"){
+                if (is_active) { 
+                    let activeBoolean = is_active == 'true' ? true : 'false' ? false : null
+                    if (activeBoolean) {
+                        return this.gives.filter(give => { 
+                            return give.is_active == true;
+                        });
+                    }else if (!activeBoolean) {
+                        return this.gives.filter(give => { 
+                            return give.is_active == false;
+                        });
+                    }                
+                }  
+                return this.gives;
+            }
+        }}
     
     findOne(gid: number): GivesModel {
         const give: GivesModel = this.gives.find(give => give.gid === gid);

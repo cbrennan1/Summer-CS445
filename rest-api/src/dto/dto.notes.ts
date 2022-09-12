@@ -6,3 +6,4 @@ export class NotesCreationDto {
     to_id: number;
     description: string;
     date_created: string|Date|null;}
+    

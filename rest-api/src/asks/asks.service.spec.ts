@@ -1,7 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import exp from 'constants';
 import { AsksService } from './asks.service';
 
 describe('AsksService', () => {
@@ -125,15 +124,15 @@ describe('AsksService', () => {
   });
 
 //////////////////////////////////////////Update TESTING//////////////////////////////////////////
-  // Not Found UID: Bad Account Activation
+  //Testing Not Found UID: Bad Account Activation
   it('should throw a notfoundexception', () => {
     expect(() => {asksService.update(420, 420, testingUpdatedAsk)}).toThrow(NotFoundException)
   });
-  // Not matching uid: Bad Account Activation
+  //Testing Not matching uid: Bad Account Activation
   it('should throw a notfoundexception', () => {
     expect(() => {asksService.update(420, 0, testingUpdatedAsk)}).toThrow(NotFoundException)
   });
-  // Inactive UID: Bad Account Activation
+  //Testing Inactive UID: Bad Account Activation
   it('should throw a badrequest', () => {
     expect(() => {asksService.update(1, 1, testingUpdatedAsk2)}).toThrow(BadRequestException)
   });

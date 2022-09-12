@@ -7,7 +7,7 @@ export class GivesController {
     constructor(private givesService: GivesService){}
 
     @Get('gives')
-    findGives(@Query() query: { v_by: string, is_active?: string}): GivesModel[] {
+    findGives(@Query() query: { v_by: string, is_active: boolean}): GivesModel[] {
         return this.givesService.findAll(parseInt(query.v_by), query.is_active);
     }
     @Get('gives/:gid')
