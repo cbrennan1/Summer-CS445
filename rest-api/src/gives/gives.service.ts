@@ -104,20 +104,18 @@ export class GivesService {
                 return this.gives.filter(give => {
                     let visibleAccountIndex = this.accountsService.accounts.findIndex(account => account.uid == v_by);
                     let visibleZip = this.accountsService.accounts[visibleAccountIndex].address.zip;
-                    let partialResponse = give.extra_zip.includes(visibleZip);
-                    let partialResponse2 = give.uid == v_by;
-                    return partialResponse2 || partialResponse;
-                })
+                    return give.uid == v_by || give.extra_zip.includes(visibleZip);
+                });
         }
         //CSR can see all Gives
             else if (Actor === "CSR"){
+                let activeBoolean = is_active == 'true' ? true : 'false' ? false : null
                 if (is_active) { 
-                    let activeBoolean = is_active == 'true' ? true : 'false' ? false : null
-                    if (activeBoolean) {
+                    if (activeBoolean==true) {
                         return this.gives.filter(give => { 
                             return give.is_active == true;
                         });
-                    }else if (!activeBoolean) {
+                    }else if (activeBoolean==false) {
                         return this.gives.filter(give => { 
                             return give.is_active == false;
                         });

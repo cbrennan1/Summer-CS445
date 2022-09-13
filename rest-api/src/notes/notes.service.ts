@@ -31,11 +31,12 @@ export class NotesService {
             let conversationIndex = (this.conversations.findIndex(conversation => {return (conversation.uid == newNote.uid) || (conversation.uid == newNote.to_user_id)}));
             let noteReplyIndex: number;
             if ((this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})) != -1) {
-                noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)}));
+                noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})); 
             } else {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.notes.at(-1).nid == newNote.to_id)}));
             }
-            this.conversations[conversationIndex].conversations[noteReplyIndex].notes.push(newNote);    
+            this.conversations[conversationIndex].conversations[noteReplyIndex].notes.push(newNote);
+            return newNote; 
         }
         else if (newNote.to_type === 'ask' || 'give' || 'thanks') {
             //Check to see if a conversation exists where the sourceID is equal to newnote toID
@@ -87,7 +88,7 @@ export class NotesService {
     }
 
     //Update Notes Service
-    update(nid: number, note: NotesModel): void {
+    update(nid: number, note: NotesModel) {
         if (!this.notes[nid]) {
             throw new NotFoundException('Note NID: '+nid+' was not found, unable to update.');
         }
@@ -126,7 +127,7 @@ export class NotesService {
     delete(uid: number, nid: number): void {
         //Error Handling
         if (!this.notes[nid]) {
-            throw new NotFoundException('Error: Give GID: ' +nid+ ' was not found, unable to delete.');
+            throw new NotFoundException('Error: Note NID: ' +nid+ ' was not found, unable to delete.');
         }else if (uid != this.notes[nid].uid) {
             throw new NotFoundException('Error: Account UID: ' +uid+ ' invalid, unable to delete.');
         }
@@ -144,12 +145,6 @@ export class NotesService {
                     conversation.conversations = conversation.conversations.filter(element => element.with_uid == v_by)
                     return conversation;
                 })}}
-    //View Notes with c_by service
-    viewNotes(c_by?: number, v_by?: number, type?: string, agid?: number): NotesModel[] | NotesConversationModel[] {
-                return this.conversations.filter(thread => { 
-                    return (thread.uid == c_by)
-                });
-            }
     //View Singular Note Service
     viewNote(nid: number): NotesModel {
         const note: NotesModel = this.notes.find(note => note.uid === nid);
@@ -159,11 +154,10 @@ export class NotesService {
         }
         return note;
     }
-    //Search Notes Service
-    searchNotes(key?: string): NotesModel[] {
-        if (key) {
-            return [];
-        }
+    //View Notes with c_by service
+    viewNotes(c_by?: number, v_by?: number, type?: string, agid?: number): NotesModel[] | NotesConversationModel[] {
+        return this.conversations.filter(thread => { 
+            return (thread.uid == c_by)
+        });
     }
-
 }

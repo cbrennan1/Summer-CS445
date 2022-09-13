@@ -17,7 +17,7 @@ export class NotesController {
     //Put Notes
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('notes/:nid')
-    updateNote(@Param('nid', ParseIntPipe) nid: number, @Body() note: NotesModel): void{
+    updateNote(@Param('nid', ParseIntPipe) nid: number, @Body() note: NotesModel) {
         return this.notesService.update(nid, note);
     }
 

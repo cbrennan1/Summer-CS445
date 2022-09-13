@@ -6,7 +6,7 @@ import { ThanksModel } from './thanks.interface';
 @Injectable()
 export class ThanksService {
     //Counter and Thanks Decleration
-    private readonly thanks: ThanksModel[] = [];
+    public readonly thanks: ThanksModel[] = [];
     public counter = 0;
     
     //Create Thanks Service
@@ -39,11 +39,11 @@ export class ThanksService {
     //Update Thanks Service
     update(uid: number, tid: number, thank: ThanksModel): ThanksModel {
         //Error Handling
-        if (uid != this.thanks[tid].uid) {
-            throw new NotFoundException("Error: Provided Account UID: " +uid+  " was not valid; unable to update.");
-        }
-        else if (!this.thanks[tid]) {
+        if (!this.thanks[tid]) {
             throw new NotFoundException("Error: Provided Thanks TID: " +tid+  " was not found; unable to update.");
+        }
+        else if (uid != this.thanks[tid].uid) {
+            throw new NotFoundException("Error: Provided Account UID: " +uid+  " was not valid; unable to update.");
         }
         //Updating Thanks
         const updatedThanks: ThanksModel = {

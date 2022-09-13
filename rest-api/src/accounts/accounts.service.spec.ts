@@ -252,10 +252,22 @@ describe('AccountsService', () => {
   it('should find all accounts that match keyword and between date range', () => {
     let start = new Date('01-Mar-2000');
     let end = new Date('01-Mar-2022')
-    let accountsSearched = accountsService.findAll(null, start, end);
+    let accountsSearched = accountsService.findAll("created", start, null);
     let filteredAccounts = accountsService.accounts.filter(account => { 
-      return ((account.date_created > start ) && (account.date_created < end))
+      return ((account.date_created > start ) || (account.date_created < end))
     });
     expect(accountsSearched == filteredAccounts).toBeFalsy
   });
+    //Testing find all accounts before start date
+    it('should find all accounts created before start date', () => {
+      let start = new Date('01-Mar-2000');
+      let end = new Date('01-Mar-2022')
+      let accountsSearched = accountsService.findAll(null, start, end);
+      let filteredAccounts = accountsService.accounts.filter(account => { 
+        let accountName = account.name.toLowerCase();
+        let accountAddressStreet = account.address.street.toLowerCase();    
+        return (accountName.includes(accountName.toLowerCase()) || accountAddressStreet.includes(accountAddressStreet.toLowerCase()) && ((account.date_created > start) && (account.date_created < end))
+    )});  
+      expect(filteredAccounts).toEqual(accountsSearched)
+    });
 })

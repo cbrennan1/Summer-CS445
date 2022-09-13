@@ -28,7 +28,7 @@ export class ReportsService {
         this.reports.push(this.report1);
         this.reports.push(this.report2);
     }
-    private reportByZipDetails = [{
+    public readonly reportByZipDetails = [{
         zip: "60607",
         asks: {
             total: 0,
@@ -83,11 +83,11 @@ export class ReportsService {
     //Find Specific Report Service
     findSingleReport(rid: number, c_by: string, v_by: number, start_date?, end_date?): ReportByZip | ReportCommunication{
         const selectedReport = this.reports.find(report => report.rid == rid);
-        if (selectedReport.rid == null){
+        if (rid == null){
             throw new BadRequestException('Error: the "RID" must be specified to select a report.')
         }
         //Selected Report Number 1: Broken Down by Zip
-        if (selectedReport.rid == 1) {
+        if (rid == 1) {
             if (v_by == null) {
                 throw new BadRequestException('Error: the "v_by" must be specified to select a report.')
             }    
@@ -111,7 +111,7 @@ export class ReportsService {
             return this.reportByZip;
         }
         //Selected Report Number 2: Communications report
-        else if (selectedReport.rid == 2) {
+        else if (rid == 2) {
             if (v_by == null) {
                 throw new BadRequestException('Error: the "v_by" must be specified to select a report.')
             }    
@@ -121,10 +121,6 @@ export class ReportsService {
             }
             if (c_by != ""){
                 let c_byNum = parseInt(c_by);
-                let commAsks: any = this.asksService.asks.filter(ask => {
-                        return ask.uid == c_byNum;})
-                
-
                 let commAskArray = {
                     ask: {
                         uid: 4,
@@ -139,16 +135,6 @@ export class ReportsService {
                     },
                     conversations: []
                 }
-                let commGives = this.givesService.gives.filter(give => {
-                    return give.uid == c_byNum;})
-
-                let commGiveConvoOne = this.notesService.conversations.filter(conversation => {
-                    return conversation.conversations.filter(element => element.with_uid == 6)
-                })
-
-                let commGiveConvoTwo = this.notesService.conversations.map(conversation => {
-                    return conversation.conversations.filter(element => element.with_uid == 7)
-                })
 
                 let commGiveArray = {
                     give: {
@@ -162,8 +148,8 @@ export class ReportsService {
                         is_active: true,
                         date_created: "2022-09-06T01:08:10.723Z"
                     },
-                    conversations: [commGiveConvoOne, commGiveConvoTwo]
-                }
+                    conversations: []
+                };
                 this.communicationReport = {
                     rid: rid,
                     name: "Asks/gives and communications for a user",
@@ -173,7 +159,7 @@ export class ReportsService {
                     end_date: end_date,
                     asks: [commAskArray],
                     gives: [commGiveArray]
-                }
+                };
                 //this.communicationReport.asks.push(commAskArray);
             }
             else {

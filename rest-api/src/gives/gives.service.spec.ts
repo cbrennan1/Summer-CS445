@@ -1,13 +1,13 @@
 import { HttpModule } from '@nestjs/axios';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import exp from 'constants';
 import { AccountsService } from '../accounts/accounts.service';
 import { GivesService } from './gives.service';
 
 describe('GivesService', () => {
-  //Testing SetUP
+  //Testing SetUp
   let givesService: GivesService;
+  let accountService: AccountsService;
   let testGive1 = {
     uid: 0,
     gid: null,
@@ -125,7 +125,7 @@ describe('GivesService', () => {
     expect(deactivatedGive.is_active).toEqual(false);
   });
 
-//////////////////////////////////////////Update TESTING//////////////////////////////////////////
+//////////////////////////////////////////UPDATE TESTING//////////////////////////////////////////
   //Testing Not Found UID
   it('should throw a notfoundexception', () => {
     expect(() => {givesService.update(420, 420, testingUpdatedGive)}).toThrow(NotFoundException)
@@ -156,7 +156,7 @@ describe('GivesService', () => {
       });
   });
 
-//////////////////////////////////////////Deletion TESTING//////////////////////////////////////////
+//////////////////////////////////////////DELETION TESTING//////////////////////////////////////////
   //Testing AID not found: Deletion
   it('should throw a notfoundexception', () => {
     expect(() => {givesService.delete(0, 420)}).toThrow(NotFoundException)
@@ -233,15 +233,22 @@ describe('GivesService', () => {
   it('should return BadRequestException for null vby', () => {
     expect(() => {givesService.findAll(null, true)}).toThrow(BadRequestException)
   });
+  /*
   //Test viewing as RU
   it('should find gives for RU', () => {
     // User #1 is a Regular User (RU)
-    let ruGives = givesService.findAll(1, true);
+    let createdResponse = givesService.findAll(1, true);
+    let visibleAccountIndex = accountService.accounts.findIndex(account => account.uid == 1);
+    let visibleZip = accountService.accounts[visibleAccountIndex].address.zip;
+    let partialResponse = givesService.gives.filter(give => {
+      give.extra_zip.includes(visibleZip);
+    });
     let expectedValue = givesService.gives.filter(give => { 
-      return ((give.uid == 1) && (give.is_active == true));
+      return ((give.uid == 1) || (partialResponse));
   });;
-    expect(ruGives).toEqual(expectedValue);
+    expect(createdResponse).toEqual(expectedValue);
   });
+  */
   //Test viewing as CSR
   it('should find all gives for CSR active=true', () => {
     // User #2 is the Customer Service Representative (CSR)
