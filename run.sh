@@ -24,4 +24,6 @@ sudo npm install @nestjs/platform-express
 
 
 cd rest-api/
-npm run start:dev
+npm run test:cov
+npm run test
+npm run start
