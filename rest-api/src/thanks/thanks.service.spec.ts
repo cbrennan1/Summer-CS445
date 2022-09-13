@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ThanksService } from './thanks.Service';
+import { ThanksService } from './thanks.service';
 
 describe('ThanksService', () => {
   //Testing Setup

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GivesController } from './gives.controller';
 import { GivesModule } from './gives.module';
-import { GivesService } from './gives.Service';
+import { GivesService } from './gives.service';
 import { AccountsService } from '../accounts/accounts.service'
 
 describe('GivesService', () => {

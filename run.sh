@@ -18,6 +18,8 @@ sudo npm i -g @nestjs/cli
 sudo npm i --save @nestjs/axios
 sudo npm install --save-dev jest
 sudo npm install ts-jest
+sudo npm i --save-dev @types/jest
+sudo npm i --save-dev @nestjs/testing
 sudo npm install @nestjs/common
 sudo npm install @nestjs/core
 sudo npm install @nestjs/platform-express

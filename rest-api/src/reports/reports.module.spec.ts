@@ -6,7 +6,7 @@ import { GivesService } from '../gives/gives.service';
 import { NotesService } from '../notes/notes.service';
 import { ReportsController } from './reports.controller';
 import { ReportsModule } from './reports.module';
-import { ReportsService } from './reports.Service';
+import { ReportsService } from './reports.service';
 
 describe('ReportsModule', () => {
   //Testing Setup

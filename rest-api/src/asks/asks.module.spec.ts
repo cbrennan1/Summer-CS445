@@ -2,7 +2,7 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AsksController } from './asks.controller';
 import { AsksModule } from './asks.module';
-import { AsksService } from './asks.Service';
+import { AsksService } from './asks.service';
 
 describe('AsksService', () => {
   //Testing Setup

@@ -14,7 +14,7 @@ import { ThanksModule } from '../thanks/thanks.module';
 import { ThanksService } from '../thanks/thanks.service';
 import { AccountsController } from './accounts.controller';
 import { AccountsModule } from './accounts.module';
-import { AccountsService } from './accounts.Service';
+import { AccountsService } from './accounts.service';
 
 describe('AccountsService', () => {
   //Testing Setup
