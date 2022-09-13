@@ -34,7 +34,7 @@ export class NotesService {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})); 
             } else {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.notes.at(-1).nid == newNote.to_id)}));
-                return newNote;
+                //return newNote;
             }
             this.conversations[conversationIndex].conversations[noteReplyIndex].notes.push(newNote);
             return newNote; 
