@@ -37,29 +37,6 @@ describe('AccountsController', () => {
     is_active: true,
     date_created: null
   }
-  const mockAccountsService = {
-    findAll(){
-      return this.accounts;
-    }, 
-    create(){
-
-    }
-  }
-  const mockAsksService = {
-
-  }
-  const mockGivesService = {
-
-  }
-  const mockNotesService = {
-
-  }
-  const mockReportsService = {
-
-  }
-  const mockThanksService = {
-
-  }
   const mockcreateAccountDto = {
     uid: null,
     name: "",
@@ -80,16 +57,6 @@ describe('AccountsController', () => {
       providers: [AccountsService, AsksService, GivesService, NotesService, ReportsService, ThanksService],
       imports: [HttpModule]
     })
-    .overrideProvider(AsksService)
-    .useValue(mockAsksService)
-    .overrideProvider(GivesService)
-    .useValue(mockGivesService)
-    .overrideProvider(NotesService)
-    .useValue(mockNotesService)
-    .overrideProvider(ReportsService)
-    .useValue(mockReportsService)
-    .overrideProvider(ThanksService)
-    .useValue(mockThanksService)
     .compile();
 
     controller = module.get<AccountsController>(AccountsController);

@@ -5,6 +5,7 @@ import { CreateAskDto } from '../dto/dto.asks';
 import { AsksModel } from './asks.interface';
 import { AsksService } from './asks.service';
 import { HttpService } from '@nestjs/axios';
+import { maxHeaderSize } from 'http';
 
 @Controller('bn/api/')
 export class AsksController {
@@ -21,7 +22,7 @@ export class AsksController {
         return this.asksService.findOneAsk(parseInt(aid));
     }
     @Post('asks')
-    createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res) {
+    createAsk(@Param('uid') uid: string, @Res( {passthrough: true}) res, @Body() createAskDto: CreateAskDto) {
         if (!this.asksService.asks[parseInt(uid)].is_active) {
             throw new HttpException({
                 status: HttpStatus.BAD_REQUEST,
@@ -32,7 +33,6 @@ export class AsksController {
               }, HttpStatus.BAD_REQUEST);
         }
         let locationHeader = '/accounts/' + createAskDto.uid + '/asks/' + this.asksService.counter;
-        res.header('Location', locationHeader);
         return this.asksService.createAsk(createAskDto);
     }
 }
