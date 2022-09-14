@@ -3,7 +3,6 @@ import { NotesCreationDto } from '../dto/dto.notes';
 import { NotesModel } from './notes.interface';
 import { NotesConversationModel } from './notesConversation.interface';
 
-
 @Injectable()
 export class NotesService {
     //Declerations
@@ -34,7 +33,6 @@ export class NotesService {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})); 
             } else {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.notes.at(-1).nid == newNote.to_id)}));
-                //return newNote;
             }
             this.conversations[conversationIndex].conversations[noteReplyIndex].notes.push(newNote);
             return newNote; 

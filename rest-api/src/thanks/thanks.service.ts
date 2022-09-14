@@ -39,6 +39,9 @@ export class ThanksService {
     //Update Thanks Service
     update(uid: number, tid: number, thank: ThanksModel): ThanksModel {
         //Error Handling
+        if (uid==null) {
+            throw new NotFoundException("Error: Provide a UID cannot be null");
+        }
         if (!this.thanks[tid]) {
             throw new NotFoundException("Error: Provided Thanks TID: " +tid+  " was not found; unable to update.");
         }

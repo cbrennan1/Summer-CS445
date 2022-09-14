@@ -19,8 +19,15 @@ describe('ThanksService', () => {
     description: "This is another thank you test",
     date_created: null,
   }
+  let testThanks3 = {
+    uid: 2,
+    tid: null,
+    thank_to: 0,
+    description: "This is another thank you test",
+    date_created: null,
+  }
   let updatedThanks = {
-    uid: 0,
+    uid: 2,
     tid: 0,
     thank_to: 0,
     description: "This is an updated thank you test",
@@ -87,6 +94,9 @@ describe('ThanksService', () => {
 //////////////////////////////////////////UPDATE TESTING//////////////////////////////////////////
   //Testing Bad Thanks Updates
   it('should throw a notfoundexception', () => {
+    expect(() => {thanksService.update(null, 0, updatedThanks)}).toThrow(NotFoundException)
+  }); 
+  it('should throw a notfoundexception', () => {
     expect(() => {thanksService.update(420, 0, updatedThanks)}).toThrow(NotFoundException)
   });
   it('should throw a notfoundexception', () => {
@@ -94,8 +104,9 @@ describe('ThanksService', () => {
   }); 
   //Testing Update Thank
   it('should update the pre-existng thank with new thank', () => {
-    thanksService.update(thanksService.thanks[0].uid, thanksService.thanks[0].tid, updatedThanks);
-    expect(thanksService.thanks[0]).toEqual(updatedThanks);
+    thanksService.createThanks(testThanks3);
+    thanksService.update(2, 2, updatedThanks);
+    expect(thanksService.thanks[2]).toEqual(updatedThanks);
   });
 
 //////////////////////////////////////////GetAccountThanks TESTING//////////////////////////////////////////

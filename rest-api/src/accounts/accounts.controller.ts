@@ -28,50 +28,53 @@ export class AccountsController {
 //------------------------------------------------------------------------------------------------------------------------------/
     //Post Create Account
     @Post('accounts')
-    create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res) {
+    create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res?) {
         let locationHeader = '/accounts/' + this.accountsService.counter;
+        if(res){
         res.setHeader('Location', locationHeader);
+        }
         return this.accountsService.create(createAccountDto);
-    }
+    };
     //Get Activate Account
     @Get('accounts/:uid/activate')
     activateAccount(@Param('uid')uid: string): AccountModel {
         return this.accountsService.activate(parseInt(uid));
-    }
+    };
     //Put Update Account
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('accounts/:uid')
      updateAccount(@Param('uid') uid: string, @Body() account: AccountModel): void {
         this.accountsService.update(parseInt(uid), account); 
-    }
+    };
     //Delete Delete Account
     @Delete('accounts/:uid')
     deleteAccount(@Param('uid') uid: string): void {
         this.accountsService.delete(parseInt(uid));
-    }
+    };
     //Get Find Accounts
     @Get('accounts')
     findAccounts(@Query() query?: { key?: string, start_date?: Date, end_date?: Date}): AccountModel[] {
         //console.log(query);
         return this.accountsService.findAll(query.key, query.start_date, query.end_date);
-    }
+    };
     //Get Find Account by UID
     @Get('accounts/:uid')
     findOneAccount(@Param('uid') uid: string): AccountModel {
         return this.accountsService.findOne(parseInt(uid));
-    }
+    };
 
-    //Get Find Account by UID
-    @Get('accounts/3/ask')
-    findOneAsk(@Param('aid') aid: string): AsksModel {
-        return this.asksService.findOneAsk(parseInt(aid));
-    }
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Asks
 //------------------------------------------------------------------------------------------------------------------------------/
+    //Get Find Account by AID
+    @Get('accounts/3/ask')
+    findOneAsk(@Param('aid') aid: string): AsksModel {
+        return this.asksService.findOneAsk(parseInt(aid));
+    };
+
     //Post Create Asks
     @Post('accounts/:uid/asks')
-    createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res) {
+    createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res?) {
         if (!this.accountsService.accounts[parseInt(uid)].is_active) {
             throw new HttpException({
                 status: HttpStatus.BAD_REQUEST,
@@ -166,33 +169,35 @@ export class AccountsController {
 //------------------------------------------------------------------------------------------------------------------------------/
     //Post Create Thanks
     @Post('accounts/:uid/thanks')
-    createThank(@Param('uid') uid: string, @Body() createThankDto: CreateThanksDto, @Res( {passthrough: true}) res) {
+    createThank(@Param('uid') uid: string, @Body() createThankDto: CreateThanksDto, @Res( {passthrough: true}) res?) {
         let locationHeader = '/accounts/' + createThankDto.uid + '/thanks/' + this.thanksService.counter;
-        res.header('Location', locationHeader);
+        if(res){
+        res.header('Location', locationHeader);}
         return this.thanksService.createThanks(createThankDto);
-    }
+    };
     //Put Update Thanks
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('accounts/:uid/thanks/:tid')
     updateThank(@Param('uid', ParseIntPipe) uid: number, @Param('tid', ParseIntPipe) tid: number, @Body() thank: ThanksModel): ThanksModel {
         return this.thanksService.update(uid, tid, thank);
-    }
+    };
     //Get Get Users Thanks
     @Get('accounts/:uid/thanks')
     getAccountThanks(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: boolean}) {
         return this.thanksService.getAccountThanks(uid, query.is_active);
-    }
+    };
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Notes
 //------------------------------------------------------------------------------------------------------------------------------/
-    //Get View Asks Notes
+   
+ //Get View Asks Notes
     @Get('accounts/:uid/asks/:aid/notes/:nid')
     getAskNotes() {
         return this.notesService.findAll();
-    }
+    };
     //Get View Gives Notes
     @Get('accounts/:uid/gives/:gid/notes/:nid')
     getGiveNotes() {
         return this.notesService.findAll();
-    }
-}
+    };
+};

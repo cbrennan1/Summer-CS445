@@ -1,6 +1,5 @@
 import { BadRequestException, HttpException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { filter } from 'rxjs';
 import { AccountsService } from './accounts.service';
 
 describe('AccountsService', () => {
