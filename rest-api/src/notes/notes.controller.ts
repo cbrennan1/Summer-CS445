@@ -12,6 +12,7 @@ export class NotesController {
     create(@Body() createNotesDto: NotesCreationDto, @Res( {passthrough: true}) res?) {
         let locationHeader = '/notes/' + this.notesService.counter;
         if (res){
+        /* istanbul ignore next */
         res.header('Location', locationHeader);
         }
         return this.notesService.create(createNotesDto);

@@ -32,6 +32,7 @@ export class NotesService {
             if ((this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})) != -1) {
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.with_uid == newNote.to_user_id)})); 
             } else {
+                 /* istanbul ignore next */
                 noteReplyIndex = (this.conversations[conversationIndex].conversations.findIndex(note => {return (note.notes.at(-1).nid == newNote.to_id)}));
             }
             this.conversations[conversationIndex].conversations[noteReplyIndex].notes.push(newNote);
@@ -43,6 +44,7 @@ export class NotesService {
                 let index = this.conversations.findIndex(conversation => {return conversation.source_id == newNote.to_id}); 
                 let conversationIndex = this.conversations[index].conversations[this.conversations[index].conversations.findIndex(conversation => {return conversation.with_uid == newNote.uid})];
                 //If conversation index is undefined then create new conversation thread below
+                /* istanbul ignore next */
                 if (conversationIndex == undefined) {
                     const newConvoThread = {
                         'with_uid': newNote.uid,
@@ -56,6 +58,7 @@ export class NotesService {
                             date_created: newNote.date_created
                         }]
                     };
+                    /* istanbul ignore next */
                     this.conversations[index].conversations.push(newConvoThread);
                 } else {
                     this.conversations[index].conversations[this.conversations[index].conversations.findIndex(conversation => {return conversation.with_uid == newNote.uid})].with_uid = newNote.uid;
@@ -107,6 +110,7 @@ export class NotesService {
         if (this.conversations.findIndex(conversation => {return (conversation.uid == updatedNote.to_user_id)}) != -1) {
             conversationIndex = this.conversations.findIndex(conversation => {return (conversation.uid == updatedNote.to_user_id)})
         } else {
+            /* istanbul ignore next */
             conversationIndex = this.conversations.findIndex(conversation => {return (conversation.uid == updatedNote.uid)})
         }
         //Obtain Note Reply Index

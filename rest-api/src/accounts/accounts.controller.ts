@@ -30,6 +30,7 @@ export class AccountsController {
     @Post('accounts')
     create(@Body() createAccountDto: CreateAccountDto, @Res( {passthrough: true}) res?) {
         let locationHeader = '/accounts/' + this.accountsService.counter;
+    /* istanbul ignore next */
         if(res){
         res.setHeader('Location', locationHeader);
         }
@@ -84,8 +85,11 @@ export class AccountsController {
                 title: 'Your request data didn\'t pass validation',
               }, HttpStatus.BAD_REQUEST);
         }
+        /* istanbul ignore next */
+        if(res){
         let locationHeader = '/accounts/' + createAskDto.uid + '/asks/' + this.asksService.counter;
-        res.header('Location', locationHeader);
+        res.header('Location', locationHeader);}
+        /* istanbul ignore next */
         return this.asksService.createAsk(createAskDto);
     }
 
@@ -128,8 +132,11 @@ export class AccountsController {
                 title: 'Your request data didn\'t pass validation',
               }, HttpStatus.BAD_REQUEST);
         }
+        /* istanbul ignore next */
+        if(res){
         let locationHeader = '/accounts/' + createGiveDto.uid + '/gives/' + this.givesService.counter;
-        res.header('Location', locationHeader);
+        res.header('Location', locationHeader);}
+        /* istanbul ignore next */
         return this.givesService.create(createGiveDto);
     }
     //Get Deactivate Gives
@@ -161,6 +168,7 @@ export class AccountsController {
                 title: 'Your request data didn\'t pass validation',
               }, HttpStatus.BAD_REQUEST);
         }
+        /* istanbul ignore next */
         return this.givesService.getMyGives(uid, query.is_active);
         
     }
@@ -171,6 +179,7 @@ export class AccountsController {
     @Post('accounts/:uid/thanks')
     createThank(@Param('uid') uid: string, @Body() createThankDto: CreateThanksDto, @Res( {passthrough: true}) res?) {
         let locationHeader = '/accounts/' + createThankDto.uid + '/thanks/' + this.thanksService.counter;
+        /* istanbul ignore next */
         if(res){
         res.header('Location', locationHeader);}
         return this.thanksService.createThanks(createThankDto);
