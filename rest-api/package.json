@@ -69,8 +69,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "testPathIgnorePatterns" : [
-      "./src/main.ts" 
-    ]
+    "verbose": true
   }
 }
