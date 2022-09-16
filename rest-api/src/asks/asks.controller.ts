@@ -10,7 +10,6 @@ import { maxHeaderSize } from 'http';
 @Controller('bn/api/')
 export class AsksController {
     constructor(private asksService: AsksService, private http: HttpService) {}
-
     //Get Find Asks (Dependent on v_by and Actor)
     @Get('asks')
     findAsks(@Query() query: { v_by: number, is_active?: boolean}): AsksModel[] {
@@ -21,6 +20,7 @@ export class AsksController {
     findOneAsk(@Param('aid') aid: string): AsksModel {
         return this.asksService.findOneAsk(parseInt(aid));
     }
+    //Create Ask
     @Post('asks')
     createAsk(@Param('uid') uid: string, @Res( {passthrough: true}) res, @Body() createAskDto: CreateAskDto) {
         if (!this.asksService.asks[parseInt(uid)].is_active) {

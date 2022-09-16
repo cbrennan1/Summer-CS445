@@ -6,6 +6,7 @@ import { AsksController } from './asks.controller';
 import { AsksService } from './asks.service';
 
 describe('AsksController', () => {
+  //Set Up
   let controller: AsksController;
   let askService: AsksService;
   let http: HttpModule;
@@ -42,6 +43,7 @@ describe('AsksController', () => {
     is_active: true,
     date_created: null
   }
+  //Compile and Initalize
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AsksService, AsksController],
@@ -53,9 +55,7 @@ describe('AsksController', () => {
     http = module.get<HttpModule>(HttpModule);
     controller = module.get<AsksController>(AsksController);
     askService = module.get<AsksService>(AsksService);
-
   });
-
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
@@ -65,6 +65,7 @@ describe('AsksController', () => {
   it('should be defined', () => {
     expect(http).toBeDefined();
   });
+  //Testing
   it('findasks', () => {
     let expectedResponse = askService.asks;
     let createdResponse = controller.findAsks({'v_by': 2, 'is_active': true});

@@ -12,7 +12,6 @@ export class AccountsService {
         1: "RU",
         2: "CSR"
     };
-
     //Three Initial Provided Accounts
     private account1 = {
 		"uid": null,
@@ -50,7 +49,6 @@ export class AccountsService {
 		"is_active": true,
 		"date_created": ""
 	};
-
     //Construction of Three Initial Accounts
     public readonly accounts: AccountModel[] = [];
     constructor () {
@@ -58,7 +56,6 @@ export class AccountsService {
         this.create(this.account2);
         this.create(this.account3);
     }
-
     //Create Account Service
     create(createAccountDto: CreateAccountDto): AccountModel {
         // find the next id for a new account
@@ -86,7 +83,6 @@ export class AccountsService {
         this.counter ++;
         return newAccount;
     }
-
     //Activate Account Service
     activate(uid: number): AccountModel {
         //Error Handling
@@ -100,7 +96,6 @@ export class AccountsService {
         this.accounts[uid].is_active = true;
         return this.accounts[uid];
     } 
-
     //Update Account Service
     update(uid: number, account: AccountModel): void {
         //Error Handling
@@ -124,7 +119,6 @@ export class AccountsService {
         this.accounts[uid] = updatedAccount;
         this.accounts[uid].uid = +this.accounts[uid].uid;
     }
-
     //Delete Account Service
     delete(uid: number): void {
         //Error Handling
@@ -134,7 +128,6 @@ export class AccountsService {
         //Delete Account
         this.accounts.splice(uid, 1);
     }
-
     //Find Account by UID
     findOne(uid: number): AccountModel {
         const account: AccountModel = this.accounts.find(account => account.uid === uid);
@@ -145,7 +138,6 @@ export class AccountsService {
         //Return Singular Account
         return account;
     }
-
     // Search ALL accounts or add optional queries
     findAll(key?: string, start_date?: Date, end_date?: Date): AccountModel[] {
         if (key) {

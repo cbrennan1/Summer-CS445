@@ -4,6 +4,7 @@ import { GivesController } from './gives.controller';
 import { GivesService } from './gives.service';
 
 describe('GivesController', () => {
+  //Set Up
   let controller: GivesController;
   let givesService: GivesService;
   let testGive1 = {
@@ -17,6 +18,7 @@ describe('GivesController', () => {
     is_active: true,
     date_created: null
   }
+  //Compile and Initalize
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [GivesService, AccountsService],
@@ -28,13 +30,13 @@ describe('GivesController', () => {
     givesService = module.get<GivesService>(GivesService)
 
   });
-
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
   it('should be defined', () => {
     expect(givesService).toBeDefined();
   });
+  //Testing
   it('get thanks', () => {
     let expectedResponse = givesService.gives;
     let createdResponse = controller.findGives({'v_by': '2', 'is_active': true})

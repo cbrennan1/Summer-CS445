@@ -135,7 +135,6 @@ describe('AccountsService', () => {
     is_active: expect.any(Boolean),
     date_created: expect.any(String)
   }));
-
 //////////////////////////////////////////CREATION TESTING//////////////////////////////////////////
   //Testing Activating Null UID
   it('should throw a BadRequestException if attempting to activate without a number uid', () => {
@@ -157,7 +156,6 @@ describe('AccountsService', () => {
     is_active: true,
     date_created: expect.any(String)
   }));
-
 //////////////////////////////////////////Update TESTING//////////////////////////////////////////  
   //Testing with Unfound UID
   it('should throw a notfoundexception', () => {
@@ -182,7 +180,6 @@ describe('AccountsService', () => {
       date_created: ""   
     });
   });
-
 //////////////////////////////////////////Deletion TESTING//////////////////////////////////////////
   //Testing Not Found UID Deletion
   it('should throw a notfoundexception', () => {
@@ -200,7 +197,6 @@ describe('AccountsService', () => {
     accountsService.delete(accountsService.accounts[0].uid);
     expect(accountToDelete == accountsService.accounts[0]).toBeFalsy();
   });
- 
 //////////////////////////////////////////'find one account' TESTING//////////////////////////////////////////  
   //Testing Finding Invalid UID
   it('throw not found exception for finding account', () => {
@@ -211,7 +207,6 @@ describe('AccountsService', () => {
     let firstAccount = accountsService.findOne(0);
     expect(firstAccount).toEqual(accountsService.accounts[0]);
     });
-
 //////////////////////////////////////////'find all' TESTING//////////////////////////////////////////  
   //Testing find all accounts no query
   it('Find All Accounts no query', () => {

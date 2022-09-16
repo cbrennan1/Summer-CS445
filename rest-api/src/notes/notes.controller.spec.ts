@@ -24,7 +24,6 @@ describe('NotesController', () => {
     description: "test note",
     date_created: null
   }
-
   //Compile and Initialize
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,6 +40,7 @@ describe('NotesController', () => {
   it('should be defined', () => {
     expect(notesService).toBeDefined();
   });
+  //Testing
   it('should create a note', () => {
     notesService.create(testNote1);
     let createdResponse = controller.create(testNote1);

@@ -20,9 +20,7 @@ import { ThanksModel } from '../thanks/thanks.interface';
 
 @Controller('bn/api/')
 export class AccountsController {
-    constructor(private accountsService: AccountsService, private asksService: AsksService, private givesService: GivesService, private thanksService: ThanksService, private notesService: NotesService, private reportsService: ReportsService, private http: HttpService){}
-
-    
+    constructor(private accountsService: AccountsService, private asksService: AsksService, private givesService: GivesService, private thanksService: ThanksService, private notesService: NotesService, private reportsService: ReportsService, private http: HttpService){}    
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Accounts
 //------------------------------------------------------------------------------------------------------------------------------/
@@ -63,7 +61,6 @@ export class AccountsController {
     findOneAccount(@Param('uid') uid: string): AccountModel {
         return this.accountsService.findOne(parseInt(uid));
     };
-
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Asks
 //------------------------------------------------------------------------------------------------------------------------------/
@@ -72,7 +69,6 @@ export class AccountsController {
     findOneAsk(@Param('aid') aid: string): AsksModel {
         return this.asksService.findOneAsk(parseInt(aid));
     };
-
     //Post Create Asks
     @Post('accounts/:uid/asks')
     createAsk(@Param('uid') uid: string, @Body() createAskDto: CreateAskDto, @Res( {passthrough: true}) res?) {
@@ -92,7 +88,6 @@ export class AccountsController {
         /* istanbul ignore next */
         return this.asksService.createAsk(createAskDto);
     }
-
     //Get Deactivate Asks
     @Get('accounts/:uid/asks/:aid/deactivate')
     deactivateAsk(@Param('uid') uid: string, @Param('aid') aid: string): AsksModel {
@@ -115,11 +110,9 @@ export class AccountsController {
     getMyAsks(@Param('uid', ParseIntPipe) uid: number, @Query() query?: {is_active?: string}) {
         return this.asksService.getMyAsks(uid, query.is_active);
     }
-
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Gives
 //------------------------------------------------------------------------------------------------------------------------------/
-
     //Post Creating Gives
     @Post('accounts/:uid/gives')
     createGive(@Param('uid') uid: string, @Body() createGiveDto: CreateGiveDto, @Res( {passthrough: true}) res) {
@@ -198,7 +191,6 @@ export class AccountsController {
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Notes
 //------------------------------------------------------------------------------------------------------------------------------/
-   
  //Get View Asks Notes
     @Get('accounts/:uid/asks/:aid/notes/:nid')
     getAskNotes() {

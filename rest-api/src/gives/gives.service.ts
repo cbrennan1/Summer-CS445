@@ -13,7 +13,6 @@ export class GivesService {
         2: "CSR"
     };
     constructor (private accountsService: AccountsService){}
-
     //Create Give Service
     create(createGiveDto: CreateGiveDto): GivesModel {
         let gid = this.counter;
@@ -124,7 +123,6 @@ export class GivesService {
                 return this.gives;
             }
         }}
-    
     findOne(gid: number): GivesModel {
         const give: GivesModel = this.gives.find(give => give.gid === gid);
         //Error Handling

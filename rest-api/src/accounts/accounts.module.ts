@@ -12,7 +12,6 @@ import { GivesController } from '../gives/gives.controller';
 import { ThanksController } from '../thanks/thanks.controller';
 import { ReportsController } from '../reports/reports.controller';
 
-
 @Module({
   controllers: [AccountsController, AsksController, GivesController, ThanksController, ReportsController],
   providers: [AccountsService, AsksService, GivesService, NotesService, ReportsService, ThanksService],

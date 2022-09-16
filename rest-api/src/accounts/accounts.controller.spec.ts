@@ -188,7 +188,6 @@ function findOneAsk(aid: number): AsksModel {
   it('asks: Get My Ask', () => {
     expect(() => {accountsController.getMyAsks(null,{is_active:"true"});}).toThrow(NotFoundException);
   });
-
 //------------------------------------------------------------------------------------------------------------------------------/
     //End Points Regarding Gives
 //------------------------------------------------------------------------------------------------------------------------------/
